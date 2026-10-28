@@ -1,0 +1,40 @@
+<section id="llegan" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Por qué llegan al suelo?</h2>
+<div style="display:flex;flex-direction:column;gap:24px;width:760px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Desde la Tierra</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La vida media del muón se dilata: de 2,2 µs a unos 49 µs.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6FB5">Desde el muón</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La atmósfera se contrae en la dirección del movimiento: de 15 km a unos 0,67 km.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:2px solid #FFC24D;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Conclusión</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">Ambas descripciones son compatibles. Con v = 0,999 c, γ ≈ 22.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:928px;top:208px;width:864px;height:640px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="864" height="640"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,Arial';x.fillText(s,px,py)}
+function fm(n,d){return n.toFixed(d).replace('.',',')}
+function slab(ox,top,h,col){x.fillStyle='#14224F';x.fillRect(ox+150,top,130,h);x.strokeStyle=col;x.lineWidth=3;x.strokeRect(ox+150,top,130,h);x.fillStyle='#2F6B4F';x.fillRect(ox+100,top+h,230,14)}
+function mu(px,py){var g=x.createRadialGradient(px,py,2,px,py,34);g.addColorStop(0,'rgba(255,111,181,.9)');g.addColorStop(1,'rgba(255,111,181,0)');x.fillStyle=g;x.beginPath();x.arc(px,py,34,0,6.3);x.fill();x.fillStyle='#FF6FB5';x.beginPath();x.arc(px,py,13,0,6.3);x.fill()}
+function f(ts){if(!S)S=ts;var t=ts-S,u=Math.min(1,(t%10000)/8000);
+x.fillStyle='#0B1230';x.fillRect(0,0,864,640);
+tx('Desde la Tierra',40,50,30,'#4FD1FF',700);tx('Desde el muón',472,50,30,'#FF6FB5',700);
+x.fillStyle='#26335F';x.fillRect(431,20,2,600);
+slab(0,90,420,'#4FD1FF');tx('≈ 15 km',292,310,28,'#EAF0FF',700);
+mu(215,90+420*u);
+x.strokeStyle='rgba(169,182,214,.5)';x.lineWidth=2;
+for(var i=0;i!=8;i++){var sy=(ts*.25+i*80)%560+60,sx=470+i*47%380;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx,sy-40);x.stroke()}
+var off=19*u;slab(432,200-off,19,'#FF6FB5');tx('≈ 0,67 km',724,226,28,'#EAF0FF',700);
+mu(647,200);
+tx('Reloj de la Tierra: '+fm(49.2*u,1)+' µs',40,570,28,'#C9D4F2');
+tx('Reloj del muón: '+fm(2.2*u,1)+' µs',40,610,28,'#FFC24D',700);
+tx('Reloj del muón: '+fm(2.2*u,1)+' µs',472,610,28,'#FFC24D',700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<aside>Dos descripciones del mismo suceso. Desde la Tierra, el reloj del muón corre lento: en lugar de 2,2 µs dispone de unos 49 µs, tiempo suficiente para recorrer cerca de 15 km a 0,999 c. Desde el muón, su propio reloj marca 2,2 µs con normalidad, pero la atmósfera que se le viene encima mide solo unos 0,67 km por la contracción de la longitud. En ambos casos el muón llega al suelo. La animación no está a escala vertical en la columna derecha: ahí la capa de aire tiene 22 veces menos espesor que en la izquierda, que es justo lo que se quiere mostrar. Precisión: 2,2 µs es una vida media; no todos los muones sobreviven, pero la fracción que llega es mucho mayor con la relatividad.</aside>
+</section>

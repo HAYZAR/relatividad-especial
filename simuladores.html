@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Simuladores de relatividad</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500..700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: cabecera, pestañas por simulador y un panel de dos columnas (controles | lienzo) que se apila en pantallas angostas. */
+:root{
+  --bg:#F2F5FB;--fg:#0D1530;--muted:#4A5675;--panel:#FFFFFF;--line:#D3DAEA;
+  --cyan:#0B7FA8;--amber:#A85F00;--pink:#BF2A77;
+  --head:'Space Grotesk',system-ui,sans-serif;--body:'DM Sans',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#070B16;--fg:#EAF0FF;--muted:#A9B6D6;--panel:#0F1730;--line:#26335F;--cyan:#4FD1FF;--amber:#FFC24D;--pink:#FF6FB5;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#070B16;--fg:#EAF0FF;--muted:#A9B6D6;--panel:#0F1730;--line:#26335F;--cyan:#4FD1FF;--amber:#FFC24D;--pink:#FF6FB5;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+h1{font-family:var(--head);font-size:clamp(30px,5vw,48px);line-height:1.1;font-weight:600;text-wrap:balance}
+.lead{color:var(--muted);max-width:62ch}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav button{font:inherit;font-weight:500;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 18px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--cyan);border-color:var(--cyan);color:var(--bg)}
+nav button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.panel{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px}
+@media (max-width:820px){.panel{grid-template-columns:minmax(0,1fr);padding:20px}}
+.ctl{display:flex;flex-direction:column;gap:20px;min-width:0}
+h2{font-family:var(--head);font-size:26px;line-height:1.2;font-weight:600}
+.hint{color:var(--muted);font-size:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:500}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+output{font-family:var(--head);font-weight:600;font-variant-numeric:tabular-nums;color:var(--cyan);white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+input[type=number]{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:100%}
+.chk{display:flex;gap:10px;align-items:flex-start}
+.chk input{margin-top:5px;accent-color:var(--cyan)}
+dl{display:grid;grid-template-columns:1fr auto;gap:8px 16px;border-top:1px solid var(--line);padding-top:16px}
+dt{color:var(--muted)}
+dd{font-family:var(--head);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+dd.hi{color:var(--amber)}
+.stage{min-width:0}
+canvas{display:block;width:100%;background:#0B1230;border-radius:14px}
+.note{color:var(--muted);font-size:15px;margin-top:10px}
+.eyebrow a{color:inherit;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<p class="eyebrow">Física moderna · Relatividad especial · <a href="./">Ver la presentación</a></p>
+<h1>Simuladores de relatividad</h1>
+<p class="lead">Mueve los deslizadores y observa cómo cambian el tiempo, la longitud, la llegada de los muones y el error del GPS. Acompaña la charla «La relatividad especial».</p>
+</header>
+<nav role="tablist" aria-label="Simuladores">
+<button role="tab" id="t-reloj" aria-selected="true">Reloj de luz</button>
+<button role="tab" id="t-longitud" aria-selected="false">Contracción</button>
+<button role="tab" id="t-muones" aria-selected="false">Muones</button>
+<button role="tab" id="t-gps" aria-selected="false">GPS</button>
+</nav>
+
+<section class="panel" id="p-reloj">
+<div class="ctl">
+<h2>Dilatación del tiempo</h2>
+<p class="hint">Dos relojes de luz idénticos. El de la derecha se mueve con rapidez v; la luz recorre una diagonal más larga y cada tick tarda más.</p>
+<div class="field"><div class="row"><label for="v1">Rapidez v</label><output id="o-v1">0,800 c</output></div><input type="range" id="v1" min="0" max="0.995" step="0.001" value="0.8"></div>
+<dl>
+<dt>Factor γ</dt><dd class="hi" id="r-g1">1,667</dd>
+<dt>Tiempo propio Δt₀ (L = 1 m)</dt><dd id="r-t0">6,67 ns</dd>
+<dt>Tiempo medido Δt = γ·Δt₀</dt><dd id="r-t1">11,11 ns</dd>
+<dt>Ticks del reposo por cada tick del móvil</dt><dd id="r-ratio">1,67</dd>
+</dl>
+</div>
+<div class="stage"><canvas id="c-reloj" aria-label="Dos relojes de luz: uno en reposo con la luz vertical y otro en movimiento con la luz en diagonal"></canvas><p class="note">Los tiempos de la animación están ampliados: un tick del reloj en reposo dura 2 s.</p></div>
+</section>
+
+<section class="panel" id="p-longitud" hidden>
+<div class="ctl">
+<h2>Contracción de la longitud</h2>
+<p class="hint">La línea punteada es la longitud propia L₀. La barra sólida es la longitud que mide un observador que ve pasar el objeto.</p>
+<div class="field"><div class="row"><label for="v2">Rapidez v</label><output id="o-v2">0,800 c</output></div><input type="range" id="v2" min="0" max="0.999" step="0.001" value="0.8"></div>
+<div class="field"><label for="L0">Longitud propia L₀ (m)</label><input type="number" id="L0" min="1" max="100000" step="1" value="100"></div>
+<dl>
+<dt>Factor γ</dt><dd class="hi" id="r-g2">1,667</dd>
+<dt>Longitud medida L = L₀/γ</dt><dd id="r-L">60,0 m</dd>
+<dt>Proporción L/L₀</dt><dd id="r-p">60,0 %</dd>
+</dl>
+</div>
+<div class="stage"><canvas id="c-longitud" aria-label="Barra que se acorta al aumentar la rapidez, con su longitud propia punteada detrás"></canvas><p class="note">El objeto no se aplasta: son mediciones hechas desde marcos distintos.</p></div>
+</section>
+
+<section class="panel" id="p-muones" hidden>
+<div class="ctl">
+<h2>Muones que llegan al suelo</h2>
+<p class="hint">150 muones descienden desde la altura elegida. Los de la izquierda viven 2,2 µs de media; los de la derecha tienen la vida dilatada por γ. Cada punto que se apaga es un muón que se desintegra.</p>
+<div class="field"><div class="row"><label for="v3">Rapidez v</label><output id="o-v3">0,9990 c</output></div><input type="range" id="v3" min="0.9" max="0.9999" step="0.0001" value="0.999"></div>
+<div class="field"><div class="row"><label for="h3">Altura de producción</label><output id="o-h3">15 km</output></div><input type="range" id="h3" min="5" max="30" step="1" value="15"></div>
+<dl>
+<dt>Factor γ</dt><dd class="hi" id="r-g3">22,4</dd>
+<dt>Tiempo de vuelo (Tierra)</dt><dd id="r-dt">50,1 µs</dd>
+<dt>Llegan sin relatividad</dt><dd id="r-n0">—</dd>
+<dt>Llegan con relatividad</dt><dd class="hi" id="r-n1">—</dd>
+</dl>
+</div>
+<div class="stage"><canvas id="c-muones" aria-label="Dos nubes de muones cayendo: sin relatividad casi todos se desintegran arriba, con relatividad muchos llegan al suelo"></canvas><p class="note">Modelo simple: vida media 2,2 µs, caída a rapidez constante. La fracción es un promedio estadístico.</p></div>
+</section>
+
+<section class="panel" id="p-gps" hidden>
+<div class="ctl">
+<h2>Relojes del GPS</h2>
+<p class="hint">Activa o desactiva cada efecto y mira cuánto error de posición se acumula si no se corrige.</p>
+<label class="chk" for="sr"><input type="checkbox" id="sr" checked><span>Relatividad especial: −7 µs/día</span></label>
+<label class="chk" for="gr"><input type="checkbox" id="gr" checked><span>Relatividad general: +45 µs/día</span></label>
+<div class="field"><div class="row"><label for="h4">Tiempo transcurrido</label><output id="o-h4">24 h</output></div><input type="range" id="h4" min="0" max="24" step="1" value="24"></div>
+<dl>
+<dt>Deriva del reloj</dt><dd id="r-dr">+38 µs/día</dd>
+<dt>Error de posición acumulado</dt><dd class="hi" id="r-er">11,4 km</dd>
+</dl>
+<div class="field"><div class="row"><label for="e4">Calculadora: error de tiempo</label><output id="o-e4">1,0 µs</output></div><input type="range" id="e4" min="0" max="50" step="0.5" value="1"></div>
+<dl><dt>Distancia equivalente (d = c·Δt)</dt><dd id="r-d">299,8 m</dd></dl>
+</div>
+<div class="stage"><canvas id="c-gps" aria-label="Gráfica del error de posición en kilómetros durante 24 horas según la deriva de los relojes"></canvas><p class="note">Valores aproximados. Con ambos efectos, el reloj orbital adelanta unos 38 µs por día.</p></div>
+</section>
+</div>
+<script>
+(function(){
+var C=299792458,CV='#0B1230',FG='#EAF0FF',MU='#A9B6D6',CY='#4FD1FF',AM='#FFC24D',PK='#FF6FB5',LN='#26335F';
+var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function $(s){return document.querySelector(s)}
+function nf(n,d){return n.toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d})}
+var SUP={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+function sup(n){return String(n).split('').map(function(c){return SUP[c]}).join('')}
+function frac(p){if(p>=0.001)return nf(p*100,p>=0.1?1:2)+' %';var e=Math.floor(Math.log10(p));return nf(p/Math.pow(10,e),1)+' × 10'+sup(e)}
+function gam(v){return 1/Math.sqrt(1-v*v)}
+var tz=performance.now();
+function reset(){tz=performance.now()}
+function txt(x,s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,sans-serif';x.fillText(s,px,py)}
+
+/* Reloj de luz */
+function dClock(S,t){var x=S.x,w=S.w,h=S.h,v=+$('#v1').value,g=gam(v),half=w/2;
+x.fillStyle=CV;x.fillRect(0,0,w,h);
+var Lp=Math.min(h*.38,(half-70)/(2*v*g+.0001)),top=(h-Lp)/2-8,bot=top+Lp;
+function pn(ox,mv){var T=2000,Tm=mv?g*T:T,ph=(t%Tm)/Tm,x0=mv?ox+40:ox+half/2,dx=mv?2*v*g*Lp:0,cx=x0+dx*ph;
+x.strokeStyle='rgba(255,111,181,.5)';x.lineWidth=2;x.setLineDash([7,7]);x.beginPath();x.moveTo(x0,bot);x.lineTo(x0+dx/2,top);x.lineTo(x0+dx,bot);x.stroke();x.setLineDash([]);
+x.fillStyle=CY;x.fillRect(cx-30,top-3,60,6);x.fillRect(cx-30,bot-3,60,6);
+var y=ph>.5?top+Lp*(ph-.5)*2:bot-Lp*ph*2;x.fillStyle=PK;x.beginPath();x.arc(cx,y,7,0,6.3);x.fill();
+txt(x,mv?'En movimiento':'En reposo',ox+16,26,15,FG,700);
+txt(x,'Ticks: '+Math.floor(t/Tm),ox+16,h-36,16,AM,700);
+txt(x,'Cada tick: '+nf(Tm/1000,2)+' s',ox+16,h-14,14,MU)}
+pn(0,false);pn(half,true);
+x.fillStyle=LN;x.fillRect(half-1,12,2,h-24)}
+function uClock(){var v=+$('#v1').value,g=gam(v),t0=2/C*1e9;
+$('#o-v1').textContent=nf(v,3)+' c';$('#r-g1').textContent=nf(g,3);$('#r-t0').textContent=nf(t0,2)+' ns';$('#r-t1').textContent=nf(g*t0,2)+' ns';$('#r-ratio').textContent=nf(g,2);reset()}
+
+/* Contracción */
+function dLen(S,t){var x=S.x,w=S.w,h=S.h,v=+$('#v2').value,g=gam(v),L0=w*.8,L=L0/g,cx=w/2,y=h*.28,hh=h*.2;
+x.fillStyle=CV;x.fillRect(0,0,w,h);
+x.strokeStyle='rgba(169,182,214,.5)';x.lineWidth=2;
+for(var i=0;i!=9;i++){var sx=w-((t*(.1+v*.9)*.9+i*83)%w),sy=h*.08+((i*41)%(h*.15)),ln=8+70*v;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx+ln,sy);x.stroke()}
+x.setLineDash([9,7]);x.strokeStyle='#6B7CA8';x.lineWidth=2;x.strokeRect(cx-L0/2,y,L0,hh);x.setLineDash([]);
+x.fillStyle='#1B2B5E';x.fillRect(cx-L/2,y,L,hh);x.strokeStyle=CY;x.lineWidth=3;x.strokeRect(cx-L/2,y,L,hh);
+x.fillStyle=PK;x.fillRect(cx-L/2,y,7,hh);x.fillRect(cx+L/2-7,y,7,hh);
+function dim(a,b,yy,col){x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(a,yy);x.lineTo(b,yy);x.moveTo(a,yy-8);x.lineTo(a,yy+8);x.moveTo(b,yy-8);x.lineTo(b,yy+8);x.stroke()}
+dim(cx-L0/2,cx+L0/2,y+hh+34,MU);txt(x,'L₀ (propia)',cx-36,y+hh+60,15,MU);
+dim(cx-L/2,cx+L/2,y+hh+86,AM);txt(x,'L medida',cx-30,y+hh+112,15,AM)}
+function uLen(){var v=+$('#v2').value,g=gam(v),L0=Math.max(1,+$('#L0').value||1);
+$('#o-v2').textContent=nf(v,3)+' c';$('#r-g2').textContent=nf(g,3);$('#r-L').textContent=nf(L0/g,L0/g<10?2:1)+' m';$('#r-p').textContent=nf(100/g,1)+' %'}
+
+/* Muones */
+var N=150,mu={d:[],loop:-1};
+function seedMu(){mu.d=[];for(var i=0;i!=N;i++)mu.d.push(-Math.log(1-Math.random())*2.2e-6)}
+function dMu(S,t){var x=S.x,w=S.w,h=S.h,v=+$('#v3').value,g=gam(v),alt=+$('#h3').value,dt=alt*1000/(v*C);
+var lp=Math.floor(t/9000);if(lp!=mu.loop){mu.loop=lp;seedMu()}
+var f=RM?1:Math.min(1,(t%9000)/7000),s=f*dt,top=60,bot=h-52,cw=w/2;
+x.fillStyle=CV;x.fillRect(0,0,w,h);
+x.fillStyle='#2F6B4F';x.fillRect(0,bot,w,6);x.fillStyle=LN;x.fillRect(cw-1,12,2,h-24);
+for(var c=0;c!=2;c++){var a0=0,col=c?PK:CY,k=c?g:1;
+for(var i=0;i!=N;i++){var td=mu.d[i]*k,alive=s<td,yf=alive?f:Math.min(1,td/dt),px=c*cw+20+((i*.6180339)%1)*(cw-40),py=top+(bot-top)*yf;
+if(alive)a0++;x.globalAlpha=alive?1:.22;x.fillStyle=alive?col:MU;x.beginPath();x.arc(px,py,3.5,0,6.3);x.fill()}
+x.globalAlpha=1;txt(x,c?'Con relatividad':'Sin relatividad',c*cw+16,26,15,col,700);
+txt(x,'En vuelo: '+a0+' de '+N,c*cw+16,h-18,15,FG,600)}}
+function uMu(){var v=+$('#v3').value,g=gam(v),alt=+$('#h3').value,dt=alt*1000/(v*C),tau=2.2e-6;
+$('#o-v3').textContent=nf(v,4)+' c';$('#o-h3').textContent=alt+' km';$('#r-g3').textContent=nf(g,1);$('#r-dt').textContent=nf(dt*1e6,1)+' µs';
+$('#r-n0').textContent=frac(Math.exp(-dt/tau));$('#r-n1').textContent=frac(Math.exp(-dt/(g*tau)));reset();mu.loop=-1}
+
+/* GPS */
+function drift(){return($('#sr').checked?-7:0)+($('#gr').checked?45:0)}
+function dGps(S,t){var x=S.x,w=S.w,h=S.h,dr=drift(),L=58,B=h-44,T=24,R=w-18,ym=15;
+function X(hr){return L+(R-L)*hr/24}function Y(k){return B-(B-T)*Math.min(k,ym)/ym}
+x.fillStyle=CV;x.fillRect(0,0,w,h);
+x.lineWidth=1;[0,5,10,15].forEach(function(k){x.strokeStyle=LN;x.beginPath();x.moveTo(L,Y(k));x.lineTo(R,Y(k));x.stroke();txt(x,k+' km',8,Y(k)+5,13,MU,500)});
+[0,6,12,18,24].forEach(function(hr){txt(x,hr+' h',X(hr)-14,B+24,13,MU,500)});
+var e24=Math.abs(dr)*1e-6*C/1000;
+x.strokeStyle=AM;x.lineWidth=3;x.beginPath();x.moveTo(X(0),Y(0));x.lineTo(X(24),Y(e24));x.stroke();
+var hr=+$('#h4').value,eh=e24*hr/24;x.fillStyle=PK;x.beginPath();x.arc(X(hr),Y(eh),7,0,6.3);x.fill();
+txt(x,nf(eh,1)+' km',Math.min(X(hr)+12,w-84),Math.max(Y(eh)-12,20),15,PK,700)}
+function uGps(){var dr=drift(),hr=+$('#h4').value,e=+$('#e4').value;
+$('#o-h4').textContent=hr+' h';$('#o-e4').textContent=nf(e,1)+' µs';
+$('#r-dr').textContent=(dr>0?'+':'')+dr+' µs/día';$('#r-er').textContent=nf(Math.abs(dr)*1e-6*C/1000*hr/24,1)+' km';
+$('#r-d').textContent=nf(e*1e-6*C,1)+' m'}
+
+var sims={reloj:{draw:dClock,ar:.58},longitud:{draw:dLen,ar:.5},muones:{draw:dMu,ar:.72},gps:{draw:dGps,ar:.58}},cur='reloj';
+Object.keys(sims).forEach(function(k){sims[k].c=$('#c-'+k)});
+function fit(S){var c=S.c,r=window.devicePixelRatio||1,w=c.clientWidth;if(!w)return;var h=Math.round(w*S.ar);c.width=Math.round(w*r);c.height=Math.round(h*r);c.style.height=h+'px';S.x=c.getContext('2d');S.x.setTransform(r,0,0,r,0,0);S.w=w;S.h=h}
+function show(n){if(!sims[n])n='reloj';cur=n;
+Object.keys(sims).forEach(function(k){$('#p-'+k).hidden=k!=n;$('#t-'+k).setAttribute('aria-selected',k==n?'true':'false')});
+fit(sims[n]);reset()}
+Object.keys(sims).forEach(function(k){$('#t-'+k).addEventListener('click',function(){location.hash='#'+k})});
+window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
+window.addEventListener('resize',function(){fit(sims[cur])});
+$('#v1').addEventListener('input',uClock);
+['#v2','#L0'].forEach(function(s){$(s).addEventListener('input',uLen)});
+['#v3','#h3'].forEach(function(s){$(s).addEventListener('input',uMu)});
+['#sr','#gr','#h4','#e4'].forEach(function(s){$(s).addEventListener('input',uGps)});
+uClock();uLen();uMu();uGps();seedMu();
+show(location.hash.slice(1));
+function loop(ts){var S=sims[cur];if(S&&S.x)S.draw(S,RM?3000:ts-tz);requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

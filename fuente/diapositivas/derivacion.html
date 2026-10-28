@@ -1,0 +1,39 @@
+<section id="derivacion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">De un triángulo a la fórmula</h2>
+<div style="display:flex;gap:56px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px;width:700px">
+<svg aria-label="Triángulo rectángulo: cateto horizontal v por delta t sobre 2 en cian, cateto vertical L en amarillo, hipotenusa c por delta t sobre 2 en rosa" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" style="width:700px;height:440px">
+<rect x="0" y="0" width="700" height="440" rx="24" fill="#0F1730" stroke="#26335F" stroke-width="2"/>
+<rect x="80" y="372" width="120" height="12" fill="#4FD1FF" opacity="0.5"/>
+<rect x="440" y="372" width="120" height="12" fill="#4FD1FF"/>
+<rect x="440" y="72" width="120" height="12" fill="#4FD1FF"/>
+<line x1="140" y1="378" x2="500" y2="378" stroke="#4FD1FF" stroke-width="6" stroke-linecap="round"/>
+<line x1="500" y1="378" x2="500" y2="78" stroke="#FFC24D" stroke-width="6" stroke-linecap="round"/>
+<line x1="140" y1="378" x2="500" y2="78" stroke="#FF6FB5" stroke-width="6" stroke-linecap="round"/>
+<path d="M476 378 L476 354 L500 354" fill="none" stroke="#EAF0FF" stroke-width="3"/>
+<circle cx="140" cy="378" r="10" fill="#FF6FB5"/>
+<circle cx="500" cy="78" r="10" fill="#FF6FB5"/>
+</svg>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;color:#4FD1FF;font-weight:700">v·Δt/2: lo que avanza el reloj</p>
+<p style="font-size:30px;color:#FFC24D;font-weight:700">L: la separación de los espejos</p>
+<p style="font-size:30px;color:#FF6FB5;font-weight:700">c·Δt/2: lo que recorre la luz</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">1 · En el reloj</p>
+<p style="font-size:40px;color:#EAF0FF">L = c·Δt₀ / 2</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">2 · Pitágoras</p>
+<p style="font-size:40px;color:#EAF0FF">(cΔt/2)² = (vΔt/2)² + L²</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:2px solid #FFC24D;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">3 · Despejando Δt</p>
+<p style="font-size:40px;color:#EAF0FF">Δt = Δt₀ / √(1 − v²/c²)</p>
+</div>
+</div>
+</div>
+<aside>Esta es la deducción completa con matemática de secundaria. Paso 1: el tiempo propio da la separación L. Paso 2: para el andén, el pulso recorre la hipotenusa, y el reloj avanza v·Δt/2 mientras la luz sube. Paso 3: sustituir L y despejar. Con v = 0,8 c el triángulo es el clásico 3-4-5: catetos 3 y 4, hipotenusa 5, por eso Δt = (5/3)·Δt₀.</aside>
+</section>

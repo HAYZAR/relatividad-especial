@@ -1,0 +1,28 @@
+<section id="observadores" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Dos observadores, dos recorridos</h2>
+<x-embed style="position:absolute;left:128px;top:224px;width:1664px;height:620px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="1664" height="620"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),L=210,tp=140,bot=350,TA=2000,TB=TA*5/3,S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,Arial';x.fillText(s,px,py)}
+function mir(cx,y){x.fillStyle='#4FD1FF';x.fillRect(cx-70,y-7,140,14)}
+function pn(ox,mv,t){
+var T=mv?TB:TA,ph=(t%T)/T,x0=ox+(mv?110:416),dx=mv?560:0,cx=x0+dx*ph;
+x.strokeStyle='rgba(255,111,181,.5)';x.lineWidth=3;x.setLineDash([9,9]);x.beginPath();x.moveTo(x0,bot);x.lineTo(x0+dx/2,tp);x.lineTo(x0+dx,bot);x.stroke();x.setLineDash([]);
+mir(cx,tp);mir(cx,bot);
+var y=ph>.5?tp+L*(ph-.5)*2:bot-L*ph*2;
+x.fillStyle='#FF6FB5';x.beginPath();x.arc(cx,y,15,0,6.3);x.fill();
+tx(mv?'Reloj en movimiento (0,8 c)':'Reloj en reposo',ox+40,56,32,'#EAF0FF',700);
+tx('Ticks: '+Math.floor(t/T),ox+40,470,34,'#FFC24D',700);
+tx('Cada tick dura '+(T/1000).toFixed(2).replace('.',',')+' s',ox+40,516,28,'#C9D4F2');
+}
+function f(ts){if(!S)S=ts;var t=(ts-S)%20000;
+x.fillStyle='#0B1230';x.fillRect(0,0,1664,620);
+pn(0,0,t);pn(832,1,t);
+x.fillStyle='#26335F';x.fillRect(831,20,2,520);
+tx('Tiempo en el andén: '+(t/1000).toFixed(1).replace('.',',')+' s',40,590,30,'#A9B6D6');
+tx('Misma rapidez de la luz: más camino, más tiempo',872,590,30,'#A9B6D6');
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<p style="font-size:34px;line-height:1.35;color:#C9D4F2">Dentro del tren la luz sube y baja en vertical. Desde el andén el recorrido es diagonal, y ambos miden la misma rapidez de la luz.</p>
+<aside>Pausa para observar la animación. A la izquierda, un reloj de luz en reposo en el andén: cada tick dura 2,00 s. A la derecha, un reloj idéntico que pasa a 0,8 c: para quien lo ve desde el andén, la luz recorre una diagonal más larga (triángulo 3-4-5). Como c es la misma, cada tick tarda 3,33 s. A los 20 s, uno ha hecho 10 ticks y el otro solo 6. Pregunta al público: ¿qué reloj «va más lento»?</aside>
+</section>

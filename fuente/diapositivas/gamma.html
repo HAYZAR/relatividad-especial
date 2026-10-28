@@ -1,0 +1,33 @@
+<section id="gamma" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Cuándo importa de verdad?</h2>
+<table style="width:800px;font-size:30px;color:#EAF0FF">
+<tr><th style="width:28%;text-align:left">Velocidad</th><th style="width:20%;text-align:left">γ</th><th style="width:52%;text-align:left">¿Qué pasa?</th></tr>
+<tr><td style="width:28%">0,1 c</td><td style="width:20%">1,005</td><td style="width:52%">Casi nada</td></tr>
+<tr><td style="width:28%">0,5 c</td><td style="width:20%">1,155</td><td style="width:52%">Efecto de 15 %</td></tr>
+<tr><td style="width:28%">0,8 c</td><td style="width:20%">1,667</td><td style="width:52%">Un reloj atrasa 40 %</td></tr>
+<tr><td style="width:28%">0,99 c</td><td style="width:20%">7,09</td><td style="width:52%">1 s se mide como 7 s</td></tr>
+<tr><td style="width:28%">0,999 c</td><td style="width:20%">22,4</td><td style="width:52%">Los muones</td></tr>
+</table>
+<x-embed style="position:absolute;left:928px;top:208px;width:864px;height:640px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="864" height="640"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,Arial';x.fillText(s,px,py)}
+function X(v){return 100+v*700}
+function Y(g){return 540-(g-1)/9*440}
+function f(ts){if(!S)S=ts;var t=ts-S,u=Math.min(1,(t%10000)/8000),v=.995*u;
+x.fillStyle='#0B1230';x.fillRect(0,0,864,640);
+x.strokeStyle='#26335F';x.lineWidth=2;
+[1,5,10].forEach(function(g){x.beginPath();x.moveTo(100,Y(g));x.lineTo(800,Y(g));x.stroke();tx(String(g),50,Y(g)+9,26,'#A9B6D6')});
+[0,.5,1].forEach(function(a){x.beginPath();x.moveTo(X(a),100);x.lineTo(X(a),540);x.stroke();tx(String(a).replace('.',','),X(a)-12,580,26,'#A9B6D6')});
+tx('v / c',720,620,28,'#A9B6D6');tx('γ',40,80,32,'#A9B6D6',700);
+x.strokeStyle='#4FD1FF';x.lineWidth=5;x.beginPath();
+for(var i=0;i!=200;i++){var a=i*.005,g=1/Math.sqrt(1-a*a);if(i==0)x.moveTo(X(a),Y(g));else x.lineTo(X(a),Y(g))}x.stroke();
+var gg=1/Math.sqrt(1-v*v);
+x.strokeStyle='rgba(255,194,77,.5)';x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(X(v),540);x.lineTo(X(v),Y(gg));x.lineTo(100,Y(gg));x.stroke();x.setLineDash([]);
+x.fillStyle='#FFC24D';x.beginPath();x.arc(X(v),Y(gg),14,0,6.3);x.fill();
+tx('v = '+v.toFixed(3).replace('.',',')+' c',130,150,34,'#FFC24D',700);
+tx('γ = '+gg.toFixed(2).replace('.',','),130,196,34,'#EAF0FF',700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<aside>A velocidades cotidianas γ vale 1 con muchísimos decimales: por eso no notamos nada. La curva se dispara solo cerca de c. Un avión comercial va a unos 0,0000008 c; un satélite GPS, a unos 0,000013 c; un muón de rayos cósmicos, a 0,999 c. La animación recorre la curva aumentando v hasta 0,995 c.</aside>
+</section>

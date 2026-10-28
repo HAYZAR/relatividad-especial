@@ -1,0 +1,31 @@
+{
+  "v": 4,
+  "createdOnFiles": { "v": 1, "at": "2026-10-28T17:55:00Z" },
+  "lists": "css",
+  "title": "La relatividad especial",
+  "order": [
+    "cover", "pregunta", "contexto", "postulados", "reloj", "observadores", "derivacion",
+    "dilatacion", "contraccion", "gamma", "muones", "llegan", "simuladores",
+    "gps", "gps-como", "gps-relojes", "gps-sin", "gps-usos",
+    "pet", "pet-pasos", "pet-aniquilacion", "cancer", "ventanas",
+    "ideas", "reto", "fuentes"
+  ],
+  "sections": {
+    "apertura": { "description": "Una pregunta sencilla abre la charla: ¿el tiempo transcurre igual para todos?", "start": "cover" },
+    "fundamentos": { "description": "Dos postulados y un reloj de luz bastan para deducir la dilatación del tiempo y la contracción de la longitud.", "start": "contexto" },
+    "muones": { "description": "Los muones de los rayos cósmicos son una prueba natural de la relatividad.", "start": "muones" },
+    "gps": { "description": "El GPS funciona porque corrige los efectos relativistas de sus relojes.", "start": "gps" },
+    "pet": { "description": "La aniquilación electrón-positrón permite ver la actividad del cuerpo.", "start": "pet" },
+    "cierre": { "description": "Tres ideas para llevar, preguntas, un mini-reto y fuentes.", "start": "ideas" }
+  },
+  "faces": {
+    "space-grotesk": {
+      "family": "Space Grotesk",
+      "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&display=swap"
+    },
+    "dm-sans": {
+      "family": "DM Sans",
+      "href": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+    }
+  }
+}

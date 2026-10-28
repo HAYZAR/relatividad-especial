@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La relatividad especial</title>
+<meta name="description" content="Charla de divulgación científica: trenes, muones, GPS y PET, con animaciones y simuladores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'DM Sans',Arial,sans-serif}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center;background:#070B16}
+.slide,.slide *{box-sizing:border-box}
+.slide{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;visibility:hidden;opacity:0;transition:opacity .35s,visibility 0s .35s}
+.slide.on{visibility:visible;opacity:1;transition:opacity .35s}
+.slide p,.slide h1,.slide h2,.slide h3{margin:0}
+.slide ul,.slide ol{margin:0;padding-left:1.1em}
+.slide li+li{margin-top:.3em}
+.slide hr{margin:0;border:0;height:0}
+.slide table{border-collapse:collapse}
+.slide th,.slide td{padding:.3em .6em;border-bottom:1px solid #26335F;text-align:left}
+.slide th{color:#FFC24D;border-bottom:2px solid #4A5A8C}
+.slide a{color:inherit;text-decoration:underline;text-underline-offset:6px}
+.slide svg{flex:none}
+#bar{position:fixed;left:0;top:0;height:4px;background:#FFC24D;width:0;transition:width .3s;z-index:5}
+#count{position:fixed;right:16px;bottom:12px;color:#A9B6D6;font-size:15px;z-index:5;opacity:.8;pointer-events:none}
+#notes{position:fixed;left:0;right:0;bottom:0;max-height:38%;overflow:auto;background:rgba(7,11,22,.94);color:#EAF0FF;padding:18px 28px 28px;font-size:19px;line-height:1.5;z-index:6;border-top:2px solid #FFC24D;display:none;cursor:default}
+#notes.on{display:block}
+#hint{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:rgba(15,23,48,.92);color:#EAF0FF;border:1px solid #26335F;border-radius:999px;padding:10px 22px;font-size:16px;z-index:7;transition:opacity .6s;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+<section class="slide" data-notes="Bienvenida. Esta charla recorre la relatividad especial en cuatro escenas: un tren, los muones que llegan desde el cielo, el GPS de nuestro celular y el escáner PET de un hospital. Empieza preguntando al público: ¿creen que el tiempo pasa igual para todos?" id="cover" data-transition="fade" style="background:#070B16;color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<img src="assets/fondo.jpg" alt="Fondo del universo con galaxias y el horizonte de la Tierra de noche" style="position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover">
+<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:linear-gradient(to right, rgba(5,8,18,0.82), rgba(5,8,18,0.25))"></div>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FFC24D">Charla de divulgación científica</p>
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:136px;font-weight:600;line-height:1.05;color:#EAF0FF">La relatividad especial</h1>
+<p style="font-size:48px;line-height:1.3;color:#EAF0FF;width:1300px">Del universo a la vida cotidiana: trenes, muones, GPS y PET</p>
+<p style="font-size:32px;color:#FFC24D;font-weight:500">Escuela Normal de Baranoa · Grados 10.°, 11.° y ciclo complementario</p>
+
+</section>
+<section class="slide" data-notes="Pregunta de apertura. Deja que el público vote con la mano: ¿sí o no? Anuncia que al final de la charla verán que la respuesta es no, y que esto no es un truco: se mide en laboratorios, en aviones, en satélites y en hospitales." id="pregunta" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#FFC24D">Una pregunta que cambia todo</p>
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#EAF0FF">¿El tiempo transcurre igual para todos?</h1>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:40px;line-height:1.35;color:#C9D4F2">Imagina dos observadores: uno en un tren y otro en el andén.</p>
+<p style="font-size:40px;line-height:1.35;color:#C9D4F2">¿Medirán lo mismo si la luz viaja entre dos espejos?</p>
+</div>
+<svg aria-label="Un tren en movimiento con una persona dentro y otra persona de pie en el andén" viewBox="0 0 1664 220" xmlns="http://www.w3.org/2000/svg" style="width:1664px;height:220px">
+<rect x="0" y="196" width="1664" height="6" fill="#4A5A8C"/>
+<rect x="1130" y="150" width="534" height="46" fill="#26335F"/>
+<rect x="260" y="40" width="780" height="130" rx="28" fill="#1B2B5E" stroke="#4FD1FF" stroke-width="3"/>
+<rect x="300" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<rect x="420" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<rect x="540" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<rect x="660" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<rect x="780" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<rect x="900" y="64" width="90" height="60" rx="8" fill="#0A1230" stroke="#4FD1FF" stroke-width="2"/>
+<circle cx="465" cy="94" r="13" fill="#FFC24D"/>
+<rect x="452" y="108" width="26" height="16" rx="6" fill="#FFC24D"/>
+<circle cx="360" cy="184" r="16" fill="#0A1230" stroke="#4FD1FF" stroke-width="3"/>
+<circle cx="500" cy="184" r="16" fill="#0A1230" stroke="#4FD1FF" stroke-width="3"/>
+<circle cx="800" cy="184" r="16" fill="#0A1230" stroke="#4FD1FF" stroke-width="3"/>
+<circle cx="940" cy="184" r="16" fill="#0A1230" stroke="#4FD1FF" stroke-width="3"/>
+<circle cx="1400" cy="86" r="16" fill="#FF6FB5"/>
+<rect x="1385" y="104" width="30" height="46" rx="10" fill="#FF6FB5"/>
+<path d="M1060 105 L1160 105" stroke="#FFC24D" stroke-width="5" stroke-linecap="round"/>
+<path d="M1140 88 L1162 105 L1140 122" fill="none" stroke="#FFC24D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</section>
+<section class="slide" data-notes="Cuenta la historia en una línea de tiempo: Newton explica el movimiento cotidiano, Maxwell predice que la luz es una onda con rapidez fija, Michelson y Morley no encuentran el supuesto «éter» y, en 1905, Einstein propone cambiar nuestra idea de espacio y tiempo. Un sistema inercial es uno que se mueve a velocidad constante, sin acelerar." id="contexto" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">El contexto: Einstein, 1905</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border-top:4px solid #4A5A8C;padding:24px 0 0 0">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;color:#4FD1FF">1687</p>
+<p style="font-size:32px;font-weight:700;color:#EAF0FF">Newton</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Mecánica clásica</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border-top:4px solid #4A5A8C;padding:24px 0 0 0">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;color:#4FD1FF">1865</p>
+<p style="font-size:32px;font-weight:700;color:#EAF0FF">Maxwell</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">La luz como onda electromagnética</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border-top:4px solid #4A5A8C;padding:24px 0 0 0">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;color:#4FD1FF">1887</p>
+<p style="font-size:32px;font-weight:700;color:#EAF0FF">Michelson y Morley</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">No detectan el «viento del éter»</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border-top:4px solid #FFC24D;padding:24px 0 0 0">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;color:#FFC24D">1905</p>
+<p style="font-size:32px;font-weight:700;color:#EAF0FF">Einstein</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Relatividad especial</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:48px;height:48px"><polyline points="20 6 9 17 4 12"/></svg>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La física clásica funciona muy bien a velocidades cotidianas.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FFC24D;width:48px;height:48px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">Cerca de la velocidad de la luz, nuestras intuiciones fallan.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FF6FB5;width:48px;height:48px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La relatividad especial estudia sistemas inerciales.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="Los dos postulados son todo lo que se necesita. El segundo es el sorprendente: si corres detrás de un rayo de luz, lo sigues midiendo a la misma rapidez c. Todo lo demás (dilatación del tiempo, contracción de la longitud) se deduce de aquí." id="postulados" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Los dos postulados</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:48px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1;color:#4FD1FF">1</p>
+<p style="font-size:40px;line-height:1.35;color:#EAF0FF">Las leyes de la física son iguales en todos los sistemas inerciales.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:48px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1;color:#FFC24D">2</p>
+<p style="font-size:40px;line-height:1.35;color:#EAF0FF">La velocidad de la luz en el vacío es la misma para todo observador inercial.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:center">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1.1;color:#FFC24D">c ≈ 3 × 10⁸ m/s</p>
+<p style="font-size:28px;color:#A9B6D6">Valor exacto: 299 792 458 m/s</p>
+</div>
+
+</section>
+<section class="slide" data-notes="Un reloj de luz es el reloj más simple que se puede imaginar: la luz rebota entre dos espejos y cada ida y vuelta es un «tick». Como la luz siempre viaja a c, el tiempo de un tick es 2L/c. Este es el tiempo propio: el que mide un observador que está en reposo respecto al reloj." id="reloj" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">El reloj de luz</h2>
+<div style="display:flex;flex-direction:column;gap:44px;width:760px">
+<ul style="font-size:40px;line-height:1.4;color:#EAF0FF">
+<li>Dos espejos separados una distancia L.</li>
+<li>Un pulso de luz rebota entre ellos.</li>
+</ul>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-size:28px;color:#A9B6D6">Tiempo propio del reloj</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:80px;font-weight:600;line-height:1.1;color:#FFC24D">Δt₀ = 2L / c</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:640px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;640&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),T=2000,tp=120,bot=440,cx=330,S;
+function f(ts){if(!S)S=ts;var t=ts-S;
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,640);
+x.fillStyle=&#x27;#4FD1FF&#x27;;x.fillRect(cx-130,tp-8,260,16);x.fillRect(cx-130,bot-8,260,16);
+x.strokeStyle=&#x27;#A9B6D6&#x27;;x.lineWidth=2;x.beginPath();x.moveTo(cx+190,tp);x.lineTo(cx+190,bot);x.moveTo(cx+176,tp+14);x.lineTo(cx+190,tp);x.lineTo(cx+204,tp+14);x.moveTo(cx+176,bot-14);x.lineTo(cx+190,bot);x.lineTo(cx+204,bot-14);x.stroke();
+x.fillStyle=&#x27;#EAF0FF&#x27;;x.font=&#x27;700 40px system-ui,Arial&#x27;;x.fillText(&#x27;L&#x27;,cx+226,(tp+bot)/2+14);
+var ph=(t%T)/T,y=ph&gt;.5?tp+(bot-tp)*(ph-.5)*2:bot-(bot-tp)*ph*2;
+var g=x.createRadialGradient(cx,y,2,cx,y,40);g.addColorStop(0,&#x27;rgba(255,111,181,.9)&#x27;);g.addColorStop(1,&#x27;rgba(255,111,181,0)&#x27;);
+x.fillStyle=g;x.beginPath();x.arc(cx,y,40,0,6.3);x.fill();
+x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(cx,y,15,0,6.3);x.fill();
+x.fillStyle=&#x27;#FFC24D&#x27;;x.font=&#x27;700 34px system-ui,Arial&#x27;;x.fillText(&#x27;Ticks: &#x27;+Math.floor(t/T),40,56);
+x.fillStyle=&#x27;#C9D4F2&#x27;;x.font=&#x27;600 30px system-ui,Arial&#x27;;x.fillText(&#x27;Un tick = ida y vuelta de la luz&#x27;,40,590);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="Pausa para observar la animación. A la izquierda, un reloj de luz en reposo en el andén: cada tick dura 2,00 s. A la derecha, un reloj idéntico que pasa a 0,8 c: para quien lo ve desde el andén, la luz recorre una diagonal más larga (triángulo 3-4-5). Como c es la misma, cada tick tarda 3,33 s. A los 20 s, uno ha hecho 10 ticks y el otro solo 6. Pregunta al público: ¿qué reloj «va más lento»?" id="observadores" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Dos observadores, dos recorridos</h2>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:128px;top:224px;width:1664px;height:620px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;1664&quot; height=&quot;620&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),L=210,tp=140,bot=350,TA=2000,TB=TA*5/3,S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function mir(cx,y){x.fillStyle=&#x27;#4FD1FF&#x27;;x.fillRect(cx-70,y-7,140,14)}
+function pn(ox,mv,t){
+var T=mv?TB:TA,ph=(t%T)/T,x0=ox+(mv?110:416),dx=mv?560:0,cx=x0+dx*ph;
+x.strokeStyle=&#x27;rgba(255,111,181,.5)&#x27;;x.lineWidth=3;x.setLineDash([9,9]);x.beginPath();x.moveTo(x0,bot);x.lineTo(x0+dx/2,tp);x.lineTo(x0+dx,bot);x.stroke();x.setLineDash([]);
+mir(cx,tp);mir(cx,bot);
+var y=ph&gt;.5?tp+L*(ph-.5)*2:bot-L*ph*2;
+x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(cx,y,15,0,6.3);x.fill();
+tx(mv?&#x27;Reloj en movimiento (0,8 c)&#x27;:&#x27;Reloj en reposo&#x27;,ox+40,56,32,&#x27;#EAF0FF&#x27;,700);
+tx(&#x27;Ticks: &#x27;+Math.floor(t/T),ox+40,470,34,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;Cada tick dura &#x27;+(T/1000).toFixed(2).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27; s&#x27;,ox+40,516,28,&#x27;#C9D4F2&#x27;);
+}
+function f(ts){if(!S)S=ts;var t=(ts-S)%20000;
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,1664,620);
+pn(0,0,t);pn(832,1,t);
+x.fillStyle=&#x27;#26335F&#x27;;x.fillRect(831,20,2,520);
+tx(&#x27;Tiempo en el andén: &#x27;+(t/1000).toFixed(1).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27; s&#x27;,40,590,30,&#x27;#A9B6D6&#x27;);
+tx(&#x27;Misma rapidez de la luz: más camino, más tiempo&#x27;,872,590,30,&#x27;#A9B6D6&#x27;);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p style="font-size:34px;line-height:1.35;color:#C9D4F2">Dentro del tren la luz sube y baja en vertical. Desde el andén el recorrido es diagonal, y ambos miden la misma rapidez de la luz.</p>
+
+</section>
+<section class="slide" data-notes="Esta es la deducción completa con matemática de secundaria. Paso 1: el tiempo propio da la separación L. Paso 2: para el andén, el pulso recorre la hipotenusa, y el reloj avanza v·Δt/2 mientras la luz sube. Paso 3: sustituir L y despejar. Con v = 0,8 c el triángulo es el clásico 3-4-5: catetos 3 y 4, hipotenusa 5, por eso Δt = (5/3)·Δt₀." id="derivacion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">De un triángulo a la fórmula</h2>
+<div style="display:flex;gap:56px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px;width:700px">
+<svg aria-label="Triángulo rectángulo: cateto horizontal v por delta t sobre 2 en cian, cateto vertical L en amarillo, hipotenusa c por delta t sobre 2 en rosa" viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" style="width:700px;height:440px">
+<rect x="0" y="0" width="700" height="440" rx="24" fill="#0F1730" stroke="#26335F" stroke-width="2"/>
+<rect x="80" y="372" width="120" height="12" fill="#4FD1FF" opacity="0.5"/>
+<rect x="440" y="372" width="120" height="12" fill="#4FD1FF"/>
+<rect x="440" y="72" width="120" height="12" fill="#4FD1FF"/>
+<line x1="140" y1="378" x2="500" y2="378" stroke="#4FD1FF" stroke-width="6" stroke-linecap="round"/>
+<line x1="500" y1="378" x2="500" y2="78" stroke="#FFC24D" stroke-width="6" stroke-linecap="round"/>
+<line x1="140" y1="378" x2="500" y2="78" stroke="#FF6FB5" stroke-width="6" stroke-linecap="round"/>
+<path d="M476 378 L476 354 L500 354" fill="none" stroke="#EAF0FF" stroke-width="3"/>
+<circle cx="140" cy="378" r="10" fill="#FF6FB5"/>
+<circle cx="500" cy="78" r="10" fill="#FF6FB5"/>
+</svg>
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;color:#4FD1FF;font-weight:700">v·Δt/2: lo que avanza el reloj</p>
+<p style="font-size:30px;color:#FFC24D;font-weight:700">L: la separación de los espejos</p>
+<p style="font-size:30px;color:#FF6FB5;font-weight:700">c·Δt/2: lo que recorre la luz</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">1 · En el reloj</p>
+<p style="font-size:40px;color:#EAF0FF">L = c·Δt₀ / 2</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">2 · Pitágoras</p>
+<p style="font-size:40px;color:#EAF0FF">(cΔt/2)² = (vΔt/2)² + L²</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:2px solid #FFC24D;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">3 · Despejando Δt</p>
+<p style="font-size:40px;color:#EAF0FF">Δt = Δt₀ / √(1 − v²/c²)</p>
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="La fórmula más famosa de la relatividad especial. Insiste en la palabra «tiempo propio»: es el tiempo que mide el reloj que viaja con el evento. Todos los demás observadores miden un intervalo mayor. El efecto es simétrico entre observadores inerciales, pero aquí comparamos un solo reloj contra dos observadores." id="dilatacion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Dilatación temporal</h2>
+<p style="font-size:36px;line-height:1.4;color:#C9D4F2">Para el observador externo, el recorrido de la luz es más largo. Como la rapidez de la luz es la misma:</p>
+<div style="display:flex;align-items:center;justify-content:center;gap:40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;color:#FFC24D">Δt = γ Δt₀,</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;color:#EAF0FF">γ =</p>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;line-height:1.1;color:#EAF0FF">1</p>
+<hr style="width:400px;border-top:4px solid #EAF0FF">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:60px;line-height:1.1;color:#EAF0FF">√(1 − v²/c²)</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:32px 40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Idea clave</p>
+<p style="font-size:34px;line-height:1.35;color:#EAF0FF">El intervalo medido por el observador que ve el reloj moverse es mayor que el tiempo propio entre esos eventos.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px 40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Ejemplo a 0,8 c</p>
+<p style="font-size:34px;line-height:1.35;color:#EAF0FF">Con γ = 5/3, un intervalo de 3 s en el reloj del tren se mide como 5 s desde el andén.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="La animación muestra una nave (o un tren) con longitud propia L₀. La línea punteada es esa longitud en reposo. A medida que sube la rapidez, la longitud que mide un observador externo se acorta solo en la dirección del movimiento. A 0,99 c queda en cerca de una séptima parte. Aclara que el objeto no «se aplasta»: es un resultado de comparar mediciones hechas en marcos distintos." id="contraccion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Contracción de la longitud</h2>
+<div style="display:flex;flex-direction:column;gap:40px;width:760px">
+<ul style="font-size:36px;line-height:1.4;color:#EAF0FF">
+<li>Longitud propia L₀: la que se mide en reposo respecto al objeto.</li>
+<li>En la dirección del movimiento la longitud medida es menor.</li>
+<li>No es una ilusión óptica: es una diferencia entre mediciones en marcos distintos.</li>
+</ul>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px 40px">
+<p style="font-size:28px;color:#A9B6D6">En la dirección del movimiento</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:80px;font-weight:600;line-height:1.1;color:#FFC24D">L = L₀ / γ</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:640px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;640&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),L0=620,cx=432,S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function dim(a,b,y,col){x.strokeStyle=col;x.lineWidth=3;x.beginPath();x.moveTo(a,y);x.lineTo(b,y);x.moveTo(a,y-12);x.lineTo(a,y+12);x.moveTo(b,y-12);x.lineTo(b,y+12);x.stroke()}
+function f(ts){if(!S)S=ts;var t=ts-S,v=.99*(.5-.5*Math.cos(6.2832*(t%12000)/12000)),g=1/Math.sqrt(1-v*v),L=L0/g;
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,640);
+x.strokeStyle=&#x27;rgba(169,182,214,.55)&#x27;;x.lineWidth=2;
+for(var i=0;i!=10;i++){var sx=864-((ts*(.2+v*1.6)+i*97)%864),sy=70+((i*53)%110),ln=10+90*v;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx+ln,sy);x.stroke()}
+x.setLineDash([10,8]);x.strokeStyle=&#x27;#4A5A8C&#x27;;x.lineWidth=3;x.strokeRect(cx-L0/2,230,L0,90);x.setLineDash([]);
+x.fillStyle=&#x27;#1B2B5E&#x27;;x.fillRect(cx-L/2,230,L,90);x.strokeStyle=&#x27;#4FD1FF&#x27;;x.lineWidth=4;x.strokeRect(cx-L/2,230,L,90);
+x.fillStyle=&#x27;#FF6FB5&#x27;;x.fillRect(cx-L/2,230,10,90);x.fillRect(cx+L/2-10,230,10,90);
+dim(cx-L0/2,cx+L0/2,370,&#x27;#A9B6D6&#x27;);tx(&#x27;L₀ (en reposo)&#x27;,cx-90,412,30,&#x27;#A9B6D6&#x27;);
+dim(cx-L/2,cx+L/2,450,&#x27;#FFC24D&#x27;);tx(&#x27;L medida&#x27;,cx-60,492,30,&#x27;#FFC24D&#x27;);
+tx(&#x27;v = &#x27;+v.toFixed(2).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27; c&#x27;,40,590,34,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;γ = &#x27;+g.toFixed(2).replace(&#x27;.&#x27;,&#x27;,&#x27;),330,590,34,&#x27;#EAF0FF&#x27;,700);
+tx(&#x27;L = &#x27;+(1/g).toFixed(2).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27; L₀&#x27;,560,590,34,&#x27;#4FD1FF&#x27;,700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="A velocidades cotidianas γ vale 1 con muchísimos decimales: por eso no notamos nada. La curva se dispara solo cerca de c. Un avión comercial va a unos 0,0000008 c; un satélite GPS, a unos 0,000013 c; un muón de rayos cósmicos, a 0,999 c. La animación recorre la curva aumentando v hasta 0,995 c." id="gamma" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Cuándo importa de verdad?</h2>
+<table style="width:800px;font-size:30px;color:#EAF0FF">
+<tr><th style="width:28%;text-align:left">Velocidad</th><th style="width:20%;text-align:left">γ</th><th style="width:52%;text-align:left">¿Qué pasa?</th></tr>
+<tr><td style="width:28%">0,1 c</td><td style="width:20%">1,005</td><td style="width:52%">Casi nada</td></tr>
+<tr><td style="width:28%">0,5 c</td><td style="width:20%">1,155</td><td style="width:52%">Efecto de 15 %</td></tr>
+<tr><td style="width:28%">0,8 c</td><td style="width:20%">1,667</td><td style="width:52%">Un reloj atrasa 40 %</td></tr>
+<tr><td style="width:28%">0,99 c</td><td style="width:20%">7,09</td><td style="width:52%">1 s se mide como 7 s</td></tr>
+<tr><td style="width:28%">0,999 c</td><td style="width:20%">22,4</td><td style="width:52%">Los muones</td></tr>
+</table>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:640px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;640&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function X(v){return 100+v*700}
+function Y(g){return 540-(g-1)/9*440}
+function f(ts){if(!S)S=ts;var t=ts-S,u=Math.min(1,(t%10000)/8000),v=.995*u;
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,640);
+x.strokeStyle=&#x27;#26335F&#x27;;x.lineWidth=2;
+[1,5,10].forEach(function(g){x.beginPath();x.moveTo(100,Y(g));x.lineTo(800,Y(g));x.stroke();tx(String(g),50,Y(g)+9,26,&#x27;#A9B6D6&#x27;)});
+[0,.5,1].forEach(function(a){x.beginPath();x.moveTo(X(a),100);x.lineTo(X(a),540);x.stroke();tx(String(a).replace(&#x27;.&#x27;,&#x27;,&#x27;),X(a)-12,580,26,&#x27;#A9B6D6&#x27;)});
+tx(&#x27;v / c&#x27;,720,620,28,&#x27;#A9B6D6&#x27;);tx(&#x27;γ&#x27;,40,80,32,&#x27;#A9B6D6&#x27;,700);
+x.strokeStyle=&#x27;#4FD1FF&#x27;;x.lineWidth=5;x.beginPath();
+for(var i=0;i!=200;i++){var a=i*.005,g=1/Math.sqrt(1-a*a);if(i==0)x.moveTo(X(a),Y(g));else x.lineTo(X(a),Y(g))}x.stroke();
+var gg=1/Math.sqrt(1-v*v);
+x.strokeStyle=&#x27;rgba(255,194,77,.5)&#x27;;x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(X(v),540);x.lineTo(X(v),Y(gg));x.lineTo(100,Y(gg));x.stroke();x.setLineDash([]);
+x.fillStyle=&#x27;#FFC24D&#x27;;x.beginPath();x.arc(X(v),Y(gg),14,0,6.3);x.fill();
+tx(&#x27;v = &#x27;+v.toFixed(3).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27; c&#x27;,130,150,34,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;γ = &#x27;+gg.toFixed(2).replace(&#x27;.&#x27;,&#x27;,&#x27;),130,196,34,&#x27;#EAF0FF&#x27;,700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="Los rayos cósmicos son núcleos de alta energía que chocan con la atmósfera a unos 10 o 20 km de altura y producen piones, que se desintegran en muones. El muón es como un electrón pesado e inestable: en reposo vive en promedio 2,2 microsegundos. Incluso viajando casi a la velocidad de la luz, en ese tiempo solo recorrería unos 660 metros, muy lejos de los kilómetros que hay hasta el suelo. Sin embargo, miles de muones atraviesan cada metro cuadrado cada minuto a nivel del mar." id="muones" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Los muones: partículas del cielo</h2>
+<div style="display:flex;gap:64px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:28px;width:560px">
+<ul style="font-size:32px;line-height:1.4;color:#EAF0FF">
+<li>Los rayos cósmicos producen muones en la atmósfera.</li>
+<li>Su vida media propia es de aproximadamente 2,2 µs.</li>
+<li>Sin relatividad, muchos no deberían alcanzar el suelo.</li>
+</ul>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:24px 28px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:52px;font-weight:600;line-height:1.1;color:#FFC24D">2,2 µs</p>
+<p style="font-size:26px;line-height:1.3;color:#A9B6D6">vida media propia</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:24px 28px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:52px;font-weight:600;line-height:1.1;color:#4FD1FF">≈ 660 m</p>
+<p style="font-size:26px;line-height:1.3;color:#A9B6D6">recorridos a casi c, sin dilatación</p>
+</div>
+</div>
+</div>
+<img src="assets/muones.jpg" alt="Ilustración de un rayo cósmico que choca con la atmósfera y produce una cascada de partículas y muones que llegan a detectores en tierra, con una escala de altura de 0 a 100 km" style="width:1040px;height:585px;object-fit:cover;border-radius:20px;border:1px solid #26335F">
+</div>
+
+</section>
+<section class="slide" data-notes="Dos descripciones del mismo suceso. Desde la Tierra, el reloj del muón corre lento: en lugar de 2,2 µs dispone de unos 49 µs, tiempo suficiente para recorrer cerca de 15 km a 0,999 c. Desde el muón, su propio reloj marca 2,2 µs con normalidad, pero la atmósfera que se le viene encima mide solo unos 0,67 km por la contracción de la longitud. En ambos casos el muón llega al suelo. La animación no está a escala vertical en la columna derecha: ahí la capa de aire tiene 22 veces menos espesor que en la izquierda, que es justo lo que se quiere mostrar. Precisión: 2,2 µs es una vida media; no todos los muones sobreviven, pero la fracción que llega es mucho mayor con la relatividad." id="llegan" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Por qué llegan al suelo?</h2>
+<div style="display:flex;flex-direction:column;gap:24px;width:760px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Desde la Tierra</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La vida media del muón se dilata: de 2,2 µs a unos 49 µs.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6FB5">Desde el muón</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">La atmósfera se contrae en la dirección del movimiento: de 15 km a unos 0,67 km.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:2px solid #FFC24D;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Conclusión</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">Ambas descripciones son compatibles. Con v = 0,999 c, γ ≈ 22.</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:640px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;640&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function fm(n,d){return n.toFixed(d).replace(&#x27;.&#x27;,&#x27;,&#x27;)}
+function slab(ox,top,h,col){x.fillStyle=&#x27;#14224F&#x27;;x.fillRect(ox+150,top,130,h);x.strokeStyle=col;x.lineWidth=3;x.strokeRect(ox+150,top,130,h);x.fillStyle=&#x27;#2F6B4F&#x27;;x.fillRect(ox+100,top+h,230,14)}
+function mu(px,py){var g=x.createRadialGradient(px,py,2,px,py,34);g.addColorStop(0,&#x27;rgba(255,111,181,.9)&#x27;);g.addColorStop(1,&#x27;rgba(255,111,181,0)&#x27;);x.fillStyle=g;x.beginPath();x.arc(px,py,34,0,6.3);x.fill();x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(px,py,13,0,6.3);x.fill()}
+function f(ts){if(!S)S=ts;var t=ts-S,u=Math.min(1,(t%10000)/8000);
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,640);
+tx(&#x27;Desde la Tierra&#x27;,40,50,30,&#x27;#4FD1FF&#x27;,700);tx(&#x27;Desde el muón&#x27;,472,50,30,&#x27;#FF6FB5&#x27;,700);
+x.fillStyle=&#x27;#26335F&#x27;;x.fillRect(431,20,2,600);
+slab(0,90,420,&#x27;#4FD1FF&#x27;);tx(&#x27;≈ 15 km&#x27;,292,310,28,&#x27;#EAF0FF&#x27;,700);
+mu(215,90+420*u);
+x.strokeStyle=&#x27;rgba(169,182,214,.5)&#x27;;x.lineWidth=2;
+for(var i=0;i!=8;i++){var sy=(ts*.25+i*80)%560+60,sx=470+i*47%380;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx,sy-40);x.stroke()}
+var off=19*u;slab(432,200-off,19,&#x27;#FF6FB5&#x27;);tx(&#x27;≈ 0,67 km&#x27;,724,226,28,&#x27;#EAF0FF&#x27;,700);
+mu(647,200);
+tx(&#x27;Reloj de la Tierra: &#x27;+fm(49.2*u,1)+&#x27; µs&#x27;,40,570,28,&#x27;#C9D4F2&#x27;);
+tx(&#x27;Reloj del muón: &#x27;+fm(2.2*u,1)+&#x27; µs&#x27;,40,610,28,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;Reloj del muón: &#x27;+fm(2.2*u,1)+&#x27; µs&#x27;,472,610,28,&#x27;#FFC24D&#x27;,700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="Momento de práctica. Abre la página de simuladores en un computador o en el celular y deja que los estudiantes muevan los deslizadores. Preguntas guía: ¿a qué velocidad empieza a notarse la dilatación del tiempo? ¿Qué pasa con los muones si γ vale 1? ¿Qué error de posición produce un reloj que adelanta 1 microsegundo?" id="simuladores" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Simuladores interactivos</h2>
+<p style="font-size:36px;line-height:1.35;color:#C9D4F2">Mueve los deslizadores y mira cómo cambian los resultados.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:36px 40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:48px;height:48px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<p style="font-size:36px;font-weight:700;line-height:1.2;color:#EAF0FF">Reloj de luz</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Cambia v y observa cómo se estira cada tick.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:36px 40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FFC24D;width:48px;height:48px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+<p style="font-size:36px;font-weight:700;line-height:1.2;color:#EAF0FF">Contracción de la longitud</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Elige L₀ y calcula la longitud que mide otro observador.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:36px 40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FF6FB5;width:48px;height:48px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<p style="font-size:36px;font-weight:700;line-height:1.2;color:#EAF0FF">Muones</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Compara 150 muones con y sin dilatación del tiempo.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:36px 40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:48px;height:48px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+<p style="font-size:36px;font-weight:700;line-height:1.2;color:#EAF0FF">Relojes del GPS</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Activa cada efecto relativista y mide el error acumulado.</p>
+</div>
+</div>
+<p style="font-size:30px;font-weight:700;color:#FFC24D"><a href="simuladores.html"><span style="color:#FFC24D">Abrir los simuladores →</span></a></p>
+
+</section>
+<section class="slide" data-notes="Los satélites GPS orbitan a unos 20 200 km de altura, a escala real en la animación: la órbita es unas 4 veces el radio terrestre. Hay unos 30 satélites y desde cualquier punto abierto del planeta se ven varios al mismo tiempo. El punto rosa es el teléfono: recibe señales de todos los que ve y mide cuánto tardó cada una. Con tres distancias se fija la posición; la cuarta señal corrige el reloj del teléfono, que es mucho menos preciso que los relojes atómicos de los satélites." id="gps" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Del espacio al teléfono: el GPS</h2>
+<div style="display:flex;flex-direction:column;gap:32px;width:760px">
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">1</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Los satélites transmiten señales con su posición y hora.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">2</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">El receptor compara tiempos de llegada de varias señales.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#FFC24D;width:60px">3</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Con al menos cuatro satélites estima posición y reloj.</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:660px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;660&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),S,N=12,cx=432,cy=352,R=58,RO=242;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function f(ts){if(!S)S=ts;var t=ts-S;
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,660);
+x.strokeStyle=&#x27;#26335F&#x27;;x.lineWidth=2;x.setLineDash([6,8]);x.beginPath();x.arc(cx,cy,RO,0,6.3);x.stroke();x.setLineDash([]);
+var g=x.createRadialGradient(cx-20,cy-20,10,cx,cy,R);g.addColorStop(0,&#x27;#2F7FD0&#x27;);g.addColorStop(1,&#x27;#0B2A52&#x27;);
+x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,6.3);x.fill();x.strokeStyle=&#x27;#4FD1FF&#x27;;x.lineWidth=2;x.stroke();
+var rx=cx,ry=cy-R,vis=0;
+for(var k=0;k!=N;k++){var a=k*6.2832/N+t*.00022,sx=cx+RO*Math.cos(a),sy=cy+RO*Math.sin(a),on=sy&gt;ry-4;
+if(on){vis++;x.strokeStyle=&#x27;rgba(255,194,77,.35)&#x27;;x.lineWidth=2;x.beginPath();x.moveTo(sx,sy);x.lineTo(rx,ry);x.stroke();
+var p=((t/1600)+k*.137)%1;x.fillStyle=&#x27;#FFC24D&#x27;;x.beginPath();x.arc(sx+(rx-sx)*p,sy+(ry-sy)*p,6,0,6.3);x.fill()}
+x.fillStyle=on?&#x27;#4FD1FF&#x27;:&#x27;#4A5A8C&#x27;;x.fillRect(sx-16,sy-6,32,12);x.fillRect(sx-30,sy-4,10,8);x.fillRect(sx+20,sy-4,10,8)}
+var r=8+6*((t/900)%1);x.strokeStyle=&#x27;rgba(255,111,181,&#x27;+(1-(t/900)%1)+&#x27;)&#x27;;x.lineWidth=3;x.beginPath();x.arc(rx,ry,r+10,0,6.3);x.stroke();
+x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(rx,ry,9,0,6.3);x.fill();
+tx(&#x27;Satélites a la vista: &#x27;+vis,40,56,32,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;Se necesitan al menos 4&#x27;,40,622,28,&#x27;#C9D4F2&#x27;);
+tx(&#x27;Órbita a escala: 26 560 km del centro&#x27;,40,650,26,&#x27;#A9B6D6&#x27;);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="Comprobación rápida: 0,07 s × 300 000 km/s = 21 000 km, un orden de magnitud coherente con la altura de los satélites GPS (unos 20 200 km). La idea central es que el GPS es, en el fondo, un sistema para medir tiempos: la distancia sale de multiplicar el tiempo de viaje por c. Por eso importa tanto que los relojes estén bien." id="gps-como" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Cómo sabe el celular dónde estamos?</h2>
+<div style="display:flex;gap:56px">
+<div style="display:flex;flex-direction:column;gap:32px;width:800px">
+<ul style="font-size:34px;line-height:1.4;color:#EAF0FF">
+<li>Los satélites GPS orbitan la Tierra y transmiten señales con información temporal.</li>
+<li>El receptor compara el instante de emisión con el de recepción.</li>
+<li>Como la señal viaja a la velocidad de la luz, el tiempo permite estimar una distancia:</li>
+</ul>
+<div style="display:flex;justify-content:center;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:28px 40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:84px;font-weight:600;line-height:1.1;color:#FFC24D">d ≈ c · Δt</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #4FD1FF;border-radius:24px;padding:36px 44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Un ejemplo</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Si la señal tarda 0,07 s, ha recorrido aproximadamente 21 000 km.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:36px 44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">La idea fundamental</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Un error diminuto en el tiempo puede producir un error importante en la posición calculada.</p>
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="Dos efectos que compiten. Por la velocidad orbital (unos 3,9 km/s), la relatividad especial atrasa los relojes del satélite unos 7 microsegundos al día. Por estar más lejos de la masa de la Tierra, la relatividad general los adelanta unos 45 microsegundos al día. Gana el segundo: el reloj orbital adelanta unos 38 µs/día. Para compensarlo, la frecuencia de los relojes se ajusta antes del lanzamiento. Nota pedagógica: la relatividad general va más allá de esta charla; aquí solo se menciona como el segundo efecto que se suma." id="gps-relojes" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Los relojes del GPS</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Relatividad especial</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.05;color:#4FD1FF">−7 µs/día</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">El movimiento atrasa los relojes satelitales.</p>
+<svg aria-label="Barra corta hacia la izquierda que representa menos 7 microsegundos por día" viewBox="0 0 450 36" xmlns="http://www.w3.org/2000/svg" style="width:450px;height:36px"><rect x="0" y="0" width="450" height="36" rx="8" fill="#0A1230"/><rect x="14" y="6" width="56" height="24" rx="4" fill="#4FD1FF"/><rect x="69" y="0" width="2" height="36" fill="#EAF0FF"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Relatividad general</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.05;color:#FFC24D">+45 µs/día</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">La gravedad más débil los adelanta.</p>
+<svg aria-label="Barra larga hacia la derecha que representa más 45 microsegundos por día" viewBox="0 0 450 36" xmlns="http://www.w3.org/2000/svg" style="width:450px;height:36px"><rect x="0" y="0" width="450" height="36" rx="8" fill="#0A1230"/><rect x="70" y="6" width="360" height="24" rx="4" fill="#FFC24D"/><rect x="69" y="0" width="2" height="36" fill="#EAF0FF"/></svg>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:2px solid #FF6FB5;border-radius:24px;padding:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6FB5">Efecto neto</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.05;color:#FF6FB5">+38 µs/día</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">Adelantan respecto a relojes terrestres.</p>
+<svg aria-label="Barra hacia la derecha que representa más 38 microsegundos por día" viewBox="0 0 450 36" xmlns="http://www.w3.org/2000/svg" style="width:450px;height:36px"><rect x="0" y="0" width="450" height="36" rx="8" fill="#0A1230"/><rect x="70" y="6" width="304" height="24" rx="4" fill="#FF6FB5"/><rect x="69" y="0" width="2" height="36" fill="#EAF0FF"/></svg>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#8E9CC4;width:1664px">Valores aproximados. Las tres barras usan la misma escala; la línea blanca marca cero.</p>
+
+</section>
+<section class="slide" data-notes="Si no se corrigiera el adelanto de 38 µs/día, el error de posición crecería unos 11 km cada día: 38 microsegundos por 300 000 km/s dan unos 11,4 km. La animación comprime un día en 10 segundos: en cada «hora» el error crece unos 475 m. Por eso los relojes de los satélites se ajustan de fábrica y el sistema aplica correcciones adicionales continuamente. Un teléfono que usa navegación debe mantenerse con error de pocos metros." id="gps-sin" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Qué pasaría sin corregirlos?</h2>
+<div style="display:flex;flex-direction:column;gap:32px;width:760px">
+<ul style="font-size:36px;line-height:1.4;color:#EAF0FF">
+<li>La señal viaja a la velocidad de la luz.</li>
+<li>Un error de 1 µs equivale a unos 300 m de recorrido de la señal.</li>
+<li>Sin correcciones, la navegación perdería precisión rápidamente.</li>
+</ul>
+<div style="display:flex;flex-direction:column;gap:6px;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:32px 40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1.05;color:#FFC24D">≈ 11 km</p>
+<p style="font-size:30px;line-height:1.3;color:#C9D4F2">de error acumulado por día: 38 µs × 300 000 km/s</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:620px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;620&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),S,K=28,TX=150,TY=470,A=.35;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function fm(n,d){return n.toFixed(d).replace(&#x27;.&#x27;,&#x27;,&#x27;)}
+function f(ts){if(!S)S=ts;var t=ts-S,u=Math.min(1,(t%12000)/10000),e=11.4*u,px=TX+e*K*Math.cos(A),py=TY-e*K*Math.sin(A);
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,620);
+x.strokeStyle=&#x27;rgba(169,182,214,.12)&#x27;;x.lineWidth=1;
+for(var i=0;i!=31;i++){x.beginPath();x.moveTo(i*K,0);x.lineTo(i*K,620);x.stroke();x.beginPath();x.moveTo(0,i*K);x.lineTo(864,i*K);x.stroke()}
+x.setLineDash([10,8]);x.strokeStyle=&#x27;rgba(255,194,77,.7)&#x27;;x.lineWidth=3;x.beginPath();x.moveTo(TX,TY);x.lineTo(px,py);x.stroke();x.setLineDash([]);
+x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(TX,TY,13,0,6.3);x.fill();
+x.fillStyle=&#x27;#4FD1FF&#x27;;x.beginPath();x.arc(px,py,13,0,6.3);x.fill();
+tx(&#x27;Posición real&#x27;,TX-20,TY+50,26,&#x27;#FF6FB5&#x27;,700);
+tx(&#x27;Posición calculada&#x27;,Math.min(px-60,640),py-26,26,&#x27;#4FD1FF&#x27;,700);
+tx(&#x27;Hora: &#x27;+fm(24*u,0)+&#x27; h&#x27;,40,50,32,&#x27;#EAF0FF&#x27;,700);
+tx(&#x27;Error acumulado: &#x27;+fm(e,1)+&#x27; km&#x27;,40,96,34,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;Cada cuadro = 1 km&#x27;,40,596,26,&#x27;#A9B6D6&#x27;);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="El GPS no solo da direcciones: también es una fuente de tiempo muy preciso para el mundo. Las redes de telecomunicaciones y las redes eléctricas usan las señales de tiempo de los satélites para sincronizarse. Invita a los estudiantes a nombrar apps que usan su ubicación." id="gps-usos" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿Para qué más sirve el GPS?</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:44px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:56px;height:56px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+<p style="font-size:40px;line-height:1.3;color:#EAF0FF">Transporte, aviación y navegación marítima</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:44px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FFC24D;width:56px;height:56px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+<p style="font-size:40px;line-height:1.3;color:#EAF0FF">Agricultura de precisión y cartografía</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:44px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FF6FB5;width:56px;height:56px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<p style="font-size:40px;line-height:1.3;color:#EAF0FF">Sincronización de telecomunicaciones y redes eléctricas</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:44px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:56px;height:56px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+<p style="font-size:40px;line-height:1.3;color:#EAF0FF">Geodesia y mediciones científicas</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="PET significa Positron Emission Tomography. A diferencia de una radiografía, que muestra estructuras, el PET muestra función: dónde hay más actividad metabólica. En el esquema, el anillo cian son los detectores, el punto rosa es donde se emite un positrón y los puntos amarillos son los dos detectores que reciben, a la vez, los fotones de la aniquilación." id="pet" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">PET: ver la actividad del cuerpo</h2>
+<div style="display:flex;gap:48px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:32px;width:800px">
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">1</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">PET significa tomografía por emisión de positrones.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">2</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Muestra la distribución de un trazador y la actividad metabólica.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#FFC24D;width:60px">3</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Se usa, entre otros fines, para detectar y evaluar algunos cánceres.</p>
+</div>
+</div>
+<svg aria-label="Esquema de un escáner PET: un anillo de detectores rodea al paciente; desde un punto del cuerpo salen dos fotones en direcciones opuestas hacia dos detectores" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" style="width:760px;height:570px">
+<rect x="0" y="0" width="800" height="600" rx="28" fill="#0B1230" stroke="#26335F" stroke-width="2"/>
+<circle cx="400" cy="300" r="250" fill="none" stroke="#4FD1FF" stroke-width="40" stroke-dasharray="50 15.45" opacity="0.85"/>
+<circle cx="400" cy="300" r="222" fill="#0F1730" stroke="#26335F" stroke-width="3"/>
+<ellipse cx="400" cy="300" rx="150" ry="105" fill="#1B2B5E" stroke="#4FD1FF" stroke-width="2" opacity="0.9"/>
+<ellipse cx="450" cy="270" rx="22" ry="18" fill="#FF6FB5" opacity="0.25"/>
+<line x1="215.7" y1="434.2" x2="589.1" y2="172.5" stroke="#FFC24D" stroke-width="4" stroke-dasharray="14 10"/>
+<circle cx="215.7" cy="434.2" r="14" fill="#FFC24D"/>
+<circle cx="589.1" cy="172.5" r="14" fill="#FFC24D"/>
+<circle cx="450" cy="270" r="11" fill="#FF6FB5"/>
+<path d="M574 202 L589 172 L557 183" fill="none" stroke="#FFC24D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M231 404 L216 434 L248 423" fill="none" stroke="#FFC24D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+
+</section>
+<section class="slide" data-notes="Los cuatro pasos de un estudio PET. FDG es una molécula parecida a la glucosa marcada con flúor-18, un isótopo radiactivo que emite positrones. Las zonas con mayor consumo de glucosa captan más trazador y aparecen más intensas, pero un especialista debe interpretar la imagen junto con la historia clínica: no toda zona intensa es un tumor." id="pet-pasos" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Del trazador a la imagen en cuatro pasos</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#4FD1FF">1</p>
+<p style="font-size:34px;font-weight:700;line-height:1.2;color:#EAF0FF">El radiofármaco</p>
+<p style="font-size:28px;line-height:1.35;color:#EAF0FF">Se administra FDG marcada con flúor-18, en dosis pequeña y controlada.</p>
+<p style="font-size:26px;line-height:1.35;color:#A9B6D6">Los tejidos la captan según su actividad.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#4FD1FF">2</p>
+<p style="font-size:34px;font-weight:700;line-height:1.2;color:#EAF0FF">Positrón y electrón</p>
+<p style="font-size:28px;line-height:1.35;color:#EAF0FF">El flúor-18 emite un positrón que interactúa con un electrón.</p>
+<p style="font-size:26px;line-height:1.35;color:#A9B6D6">Se producen dos fotones de 511 keV, en direcciones casi opuestas.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#4FD1FF">3</p>
+<p style="font-size:34px;font-weight:700;line-height:1.2;color:#EAF0FF">Detectar coincidencias</p>
+<p style="font-size:28px;line-height:1.35;color:#EAF0FF">Los detectores buscan dos fotones simultáneos: una línea de respuesta.</p>
+<p style="font-size:26px;line-height:1.35;color:#A9B6D6">Muchas coincidencias permiten reconstruir una distribución 3D.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:32px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#FFC24D">4</p>
+<p style="font-size:34px;font-weight:700;line-height:1.2;color:#EAF0FF">Construir la imagen</p>
+<p style="font-size:28px;line-height:1.35;color:#EAF0FF">Un computador reconstruye la distribución del trazador.</p>
+<p style="font-size:26px;line-height:1.35;color:#A9B6D6">La interpretación depende del contexto clínico.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="La animación simula un escáner PET: cada aniquilación produce dos fotones que viajan en sentidos casi opuestos y dos detectores se iluminan a la vez. Cada línea cian es una línea de respuesta. Después de muchas coincidencias, las líneas se cruzan en la región con más trazador: dos zonas más activas. El computador usa millones de líneas como estas para reconstruir la imagen tridimensional. La energía de 511 keV es la energía en reposo del electrón (E = m c²): aquí la equivalencia masa-energía se ve funcionando." id="pet-aniquilacion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Aniquilación y coincidencias</h2>
+<div style="display:flex;flex-direction:column;gap:28px;width:760px">
+<div style="display:flex;justify-content:center;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:28px 36px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;color:#FFC24D">e⁺ + e⁻ → γ + γ</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Masa-energía</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">La masa del positrón y del electrón se convierte en energía: cada fotón lleva 511 keV, la energía en reposo de un electrón (m·c²).</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:20px;padding:28px 36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6FB5">Dos fotones, una línea</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">Salen en direcciones casi opuestas; cuando dos detectores los registran a la vez, trazan una línea de respuesta.</p>
+</div>
+</div>
+<iframe class="embed" title="Animación" sandbox="allow-scripts" style="position:absolute;left:928px;top:208px;width:864px;height:660px;border:0;background:#0B1230" data-doc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;&lt;body style=&quot;margin:0;background:#0B1230;overflow:hidden&quot;&gt;&lt;canvas id=&quot;c&quot; width=&quot;864&quot; height=&quot;660&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),S,cx=432,cy=340,RR=270,ev=[],last=-9999,n=0,sp=[[480,300,2],[390,380,1]];
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+&#x27; &#x27;+sz+&#x27;px system-ui,Arial&#x27;;x.fillText(s,px,py)}
+function mk(t){var a=Math.random()&lt;.67?sp[0]:sp[1],sx=a[0]+(Math.random()+Math.random()+Math.random()-1.5)*26,sy=a[1]+(Math.random()+Math.random()+Math.random()-1.5)*26,th=Math.random()*3.1416,dx=Math.cos(th),dy=Math.sin(th),qx=sx-cx,qy=sy-cy,b=qx*dx+qy*dy,r=Math.sqrt(b*b-qx*qx-qy*qy+RR*RR);
+return{sx:sx,sy:sy,x1:sx+(-b+r)*dx,y1:sy+(-b+r)*dy,x2:sx+(-b-r)*dx,y2:sy+(-b-r)*dy,t:t}}
+function det(px,py,al){var a=Math.atan2(py-cy,px-cx);x.strokeStyle=&#x27;rgba(255,194,77,&#x27;+al+&#x27;)&#x27;;x.lineWidth=36;x.beginPath();x.arc(cx,cy,RR,a-.07,a+.07);x.stroke()}
+function f(ts){if(!S)S=ts;var t=ts-S;
+if(t-last&gt;650){last=t;ev.push(mk(t));if(ev.length&gt;45)ev.shift()}
+x.fillStyle=&#x27;#0B1230&#x27;;x.fillRect(0,0,864,660);
+x.strokeStyle=&#x27;#1B3C6B&#x27;;x.lineWidth=34;
+for(var k=0;k!=48;k++){var a=k*6.2832/48;x.beginPath();x.arc(cx,cy,RR,a-.052,a+.052);x.stroke()}
+x.fillStyle=&#x27;#10193A&#x27;;x.beginPath();x.arc(cx,cy,RR-30,0,6.3);x.fill();
+x.fillStyle=&#x27;#1B2B5E&#x27;;x.beginPath();x.ellipse(cx,cy,170,125,0,0,6.3);x.fill();
+n=0;
+for(var i=0;i!=ev.length;i++){var e=ev[i],age=t-e.t,p=Math.min(1,age/420);
+if(p==1){n++;var al=Math.max(.1,.5-(age-420)/14000);x.strokeStyle=&#x27;rgba(79,209,255,&#x27;+al+&#x27;)&#x27;;x.lineWidth=2;x.beginPath();x.moveTo(e.x1,e.y1);x.lineTo(e.x2,e.y2);x.stroke();if(age-420!=0&amp;&amp;age-420&gt;-1&amp;&amp;age-420&lt;350)det(e.x1,e.y1,.9-(age-420)/400),det(e.x2,e.y2,.9-(age-420)/400)}
+else{x.fillStyle=&#x27;#FF6FB5&#x27;;x.beginPath();x.arc(e.sx+(e.x1-e.sx)*p,e.sy+(e.y1-e.sy)*p,8,0,6.3);x.fill();x.beginPath();x.arc(e.sx+(e.x2-e.sx)*p,e.sy+(e.y2-e.sy)*p,8,0,6.3);x.fill();
+if(age&gt;-1&amp;&amp;age&gt;0){var g=x.createRadialGradient(e.sx,e.sy,2,e.sx,e.sy,40);g.addColorStop(0,&#x27;rgba(255,255,255,&#x27;+Math.max(0,.9-age/260)+&#x27;)&#x27;);g.addColorStop(1,&#x27;rgba(255,111,181,0)&#x27;);x.fillStyle=g;x.beginPath();x.arc(e.sx,e.sy,40,0,6.3);x.fill()}}}
+tx(&#x27;Coincidencias recientes: &#x27;+n,40,50,30,&#x27;#FFC24D&#x27;,700);
+tx(&#x27;Las líneas se cruzan donde está el trazador&#x27;,40,640,26,&#x27;#C9D4F2&#x27;);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+
+</section>
+<section class="slide" data-notes="La pregunta es provocadora a propósito. La relatividad no «cura» nada: el PET ayuda a ver, no a tratar. Lo que sí ocurre es que la física moderna (aniquilación de antimateria, aceleradores de partículas) es la base de herramientas médicas reales. Conviene decirlo con claridad para no sugerir curas milagrosas." id="cancer" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">¿La relatividad trata el cáncer?</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4FD1FF;width:56px;height:56px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">PET es principalmente una técnica de diagnóstico y seguimiento.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FFC24D;width:56px;height:56px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">La aniquilación electrón-positrón conecta la imagen con masa-energía.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#FF6FB5;width:56px;height:56px"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">La radioterapia con haces de partículas es otra aplicación de aceleradores y física moderna.</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#0F1730;border:2px solid #FFC24D;border-radius:24px;padding:32px 44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Respuesta corta</p>
+<p style="font-size:36px;line-height:1.3;color:#EAF0FF">No directamente: la relatividad hace posibles las herramientas, y el equipo médico decide el tratamiento.</p>
+</div>
+
+</section>
+<section class="slide" data-notes="Cierre del bloque de aplicaciones. En el LHC del CERN, cada protón tiene una energía del orden de 6,5 a 6,8 TeV, y como su masa en reposo es de unos 0,94 GeV, γ resulta cercano a 7 000. Es el caso opuesto al del tren: aquí la relatividad especial se usa todos los días para diseñar el acelerador. La relatividad general, que describe la gravedad, queda como tema para otra charla." id="ventanas" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Otras ventanas al universo</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;border-top:3px solid #4FD1FF;padding:16px 0 0 0">
+<p style="font-size:34px;font-weight:700;color:#4FD1FF">Aceleradores</p>
+<p style="font-size:30px;line-height:1.3;color:#EAF0FF">Partículas a velocidades cercanas a c.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;border-top:3px solid #FFC24D;padding:16px 0 0 0">
+<p style="font-size:34px;font-weight:700;color:#FFC24D">Física de altas energías</p>
+<p style="font-size:30px;line-height:1.3;color:#EAF0FF">Energía y masa en colisiones.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;border-top:3px solid #FF6FB5;padding:16px 0 0 0">
+<p style="font-size:34px;font-weight:700;color:#FF6FB5">Astrofísica</p>
+<p style="font-size:30px;line-height:1.3;color:#EAF0FF">Partículas cósmicas y objetos compactos.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;border-top:3px solid #A9B6D6;padding:16px 0 0 0">
+<p style="font-size:34px;font-weight:700;color:#C9D4F2">Relatividad general</p>
+<p style="font-size:30px;line-height:1.3;color:#EAF0FF">Esencial para describir la gravedad a gran escala.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;background:#0F1730;border:2px solid #4FD1FF;border-radius:28px;padding:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4FD1FF">Un protón en el LHC</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:128px;font-weight:600;line-height:1;color:#EAF0FF">γ ≈ 7 000</p>
+<p style="font-size:32px;line-height:1.35;color:#C9D4F2">Su reloj corre unas 7 000 veces más lento que el del laboratorio, a una rapidez de 0,99999999 c.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="Resume la charla con tres frases que los estudiantes puedan repetir. Vuelve a la pregunta inicial: el tiempo no transcurre igual para todos, y eso se mide en muones, en satélites y en hospitales." id="ideas" data-transition="fade" style="background:#070B16;color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:56px">
+<img src="assets/fondo.jpg" alt="Fondo del universo con galaxias y el horizonte de la Tierra de noche" style="position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover">
+<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:linear-gradient(to right, rgba(5,8,18,0.88), rgba(5,8,18,0.35))"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:80px;font-weight:600;line-height:1.1;color:#EAF0FF">Tres ideas para llevar</h2>
+<div style="display:flex;flex-direction:column;gap:40px;width:1400px">
+<div style="display:flex;gap:40px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1;color:#4FD1FF;width:90px">1</p>
+<p style="font-size:44px;line-height:1.3;color:#EAF0FF">El movimiento relativo cambia las mediciones de tiempo y longitud.</p>
+</div>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1;color:#FFC24D;width:90px">2</p>
+<p style="font-size:44px;line-height:1.3;color:#EAF0FF">La relatividad es necesaria para el funcionamiento preciso del GPS.</p>
+</div>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1;color:#FF6FB5;width:90px">3</p>
+<p style="font-size:44px;line-height:1.3;color:#EAF0FF">La física de partículas y la medicina moderna se benefician de estas ideas.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="Respuestas. 1) La luz recorre una diagonal más larga y su rapidez es la misma c, así que el intervalo es mayor. 2) La dilatación del tiempo por la velocidad orbital (relatividad especial, unos −7 µs/día) y el adelanto por gravedad más débil (relatividad general, unos +45 µs/día); el neto es unos +38 µs/día. 3) Pares de fotones de 511 keV detectados en coincidencia; no se detectan los positrones directamente. Mini-reto: γ = 1/√(1 − 0,64) = 5/3, por lo que 6 años × 5/3 = 10 años en la Tierra." id="reto" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Preguntas y mini-reto</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:56px">1</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">¿Por qué un observador externo mide más tiempo en el reloj de luz móvil?</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:56px">2</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">¿Qué dos efectos relativistas se combinan en el GPS?</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:56px">3</p>
+<p style="font-size:34px;line-height:1.3;color:#EAF0FF">¿Qué detecta realmente un escáner PET?</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#0F1730;border:2px solid #FFC24D;border-radius:28px;padding:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FFC24D">Mini-reto</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Una astronauta viaja a 0,8 c durante 6 años medidos en su reloj.</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">¿Cuántos años pasan en la Tierra?</p>
+<p style="font-size:28px;line-height:1.35;color:#A9B6D6">Pista: calcula γ con v = 0,8 c.</p>
+</div>
+</div>
+
+</section>
+<section class="slide" data-notes="Invita a los estudiantes a visitar estas instituciones para ampliar. Las ilustraciones del fondo, de los muones y las animaciones de esta presentación son material propio de la charla." id="fuentes" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Fuentes para ampliar</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1;color:#4FD1FF">NIST</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">GPS, relojes atómicos y relatividad.</p>
+<p style="font-size:28px;color:#A9B6D6"><a href="https://www.nist.gov" target="_blank" rel="noopener"><span style="color:#A9B6D6">nist.gov</span></a></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1;color:#FFC24D">NIH / NCI</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">National Cancer Institute: funcionamiento de PET y PET/CT.</p>
+<p style="font-size:28px;color:#A9B6D6"><a href="https://www.cancer.gov" target="_blank" rel="noopener"><span style="color:#A9B6D6">cancer.gov</span></a></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1;color:#FF6FB5">CERN</p>
+<p style="font-size:32px;line-height:1.3;color:#EAF0FF">Rayos cósmicos, muones y aceleradores.</p>
+<p style="font-size:28px;color:#A9B6D6"><a href="https://home.cern" target="_blank" rel="noopener"><span style="color:#A9B6D6">home.cern</span></a></p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.35;color:#C9D4F2">Para practicar: <a href="simuladores.html"><span style="color:#FFC24D">simuladores interactivos de esta charla</span></a></p>
+
+</section>
+</div></div>
+<div id="bar"></div>
+<div id="count"></div>
+<div id="notes" role="region" aria-label="Notas del orador"></div>
+<div id="hint">← → para avanzar · F pantalla completa · N notas del orador</div>
+<script>
+(function(){
+var slides=[].slice.call(document.querySelectorAll('.slide')),N=slides.length,cur=-1;
+var stage=document.getElementById('stage'),notes=document.getElementById('notes');
+function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+')'}
+function frames(sl,on){[].forEach.call(sl.querySelectorAll('iframe[data-doc]'),function(f){
+if(on){f.srcdoc=f.getAttribute('data-doc')}else{f.removeAttribute('srcdoc')}})}
+function show(n){n=Math.max(0,Math.min(N-1,n));if(n===cur)return;
+if(cur>=0){slides[cur].classList.remove('on');frames(slides[cur],false)}
+cur=n;slides[n].classList.add('on');frames(slides[n],true);
+document.getElementById('bar').style.width=((n+1)/N*100)+'%';
+document.getElementById('count').textContent=(n+1)+' / '+N;
+notes.textContent=slides[n].getAttribute('data-notes')||'Esta diapositiva no tiene notas.';
+try{history.replaceState(null,'','#'+(n+1))}catch(e){}}
+function next(){show(cur+1)}function prev(){show(cur-1)}
+document.addEventListener('keydown',function(e){
+if(e.ctrlKey||e.metaKey||e.altKey)return;var k=e.key;
+if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'||k==='ArrowDown'){e.preventDefault();next()}
+else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'||k==='ArrowUp'){e.preventDefault();prev()}
+else if(k==='Home')show(0);else if(k==='End')show(N-1);
+else if(k==='f'||k==='F'){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
+else if(k==='n'||k==='N')notes.classList.toggle('on');
+else if(k==='Escape')notes.classList.remove('on')});
+document.getElementById('viewport').addEventListener('click',function(e){
+if(e.target.closest('a'))return;if(e.clientX<innerWidth/3)prev();else next()});
+var tx=null;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',function(e){if(tx===null)return;var d=e.changedTouches[0].clientX-tx;tx=null;
+if(Math.abs(d)>50){if(d<0)next();else prev()}},{passive:true});
+window.addEventListener('resize',fit);
+window.addEventListener('hashchange',function(){var n=parseInt(location.hash.slice(1),10);if(n)show(n-1)});
+fit();show((parseInt(location.hash.slice(1),10)||1)-1);
+setTimeout(function(){document.getElementById('hint').style.opacity=0},5000);
+})();
+</script>
+</body>
+</html>

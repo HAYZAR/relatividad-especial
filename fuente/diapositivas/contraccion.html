@@ -1,0 +1,34 @@
+<section id="contraccion" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Contracción de la longitud</h2>
+<div style="display:flex;flex-direction:column;gap:40px;width:760px">
+<ul style="font-size:36px;line-height:1.4;color:#EAF0FF">
+<li>Longitud propia L₀: la que se mide en reposo respecto al objeto.</li>
+<li>En la dirección del movimiento la longitud medida es menor.</li>
+<li>No es una ilusión óptica: es una diferencia entre mediciones en marcos distintos.</li>
+</ul>
+<div style="display:flex;flex-direction:column;gap:8px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:32px 40px">
+<p style="font-size:28px;color:#A9B6D6">En la dirección del movimiento</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:80px;font-weight:600;line-height:1.1;color:#FFC24D">L = L₀ / γ</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:928px;top:208px;width:864px;height:640px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="864" height="640"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),L0=620,cx=432,S;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,Arial';x.fillText(s,px,py)}
+function dim(a,b,y,col){x.strokeStyle=col;x.lineWidth=3;x.beginPath();x.moveTo(a,y);x.lineTo(b,y);x.moveTo(a,y-12);x.lineTo(a,y+12);x.moveTo(b,y-12);x.lineTo(b,y+12);x.stroke()}
+function f(ts){if(!S)S=ts;var t=ts-S,v=.99*(.5-.5*Math.cos(6.2832*(t%12000)/12000)),g=1/Math.sqrt(1-v*v),L=L0/g;
+x.fillStyle='#0B1230';x.fillRect(0,0,864,640);
+x.strokeStyle='rgba(169,182,214,.55)';x.lineWidth=2;
+for(var i=0;i!=10;i++){var sx=864-((ts*(.2+v*1.6)+i*97)%864),sy=70+((i*53)%110),ln=10+90*v;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx+ln,sy);x.stroke()}
+x.setLineDash([10,8]);x.strokeStyle='#4A5A8C';x.lineWidth=3;x.strokeRect(cx-L0/2,230,L0,90);x.setLineDash([]);
+x.fillStyle='#1B2B5E';x.fillRect(cx-L/2,230,L,90);x.strokeStyle='#4FD1FF';x.lineWidth=4;x.strokeRect(cx-L/2,230,L,90);
+x.fillStyle='#FF6FB5';x.fillRect(cx-L/2,230,10,90);x.fillRect(cx+L/2-10,230,10,90);
+dim(cx-L0/2,cx+L0/2,370,'#A9B6D6');tx('L₀ (en reposo)',cx-90,412,30,'#A9B6D6');
+dim(cx-L/2,cx+L/2,450,'#FFC24D');tx('L medida',cx-60,492,30,'#FFC24D');
+tx('v = '+v.toFixed(2).replace('.',',')+' c',40,590,34,'#FFC24D',700);
+tx('γ = '+g.toFixed(2).replace('.',','),330,590,34,'#EAF0FF',700);
+tx('L = '+(1/g).toFixed(2).replace('.',',')+' L₀',560,590,34,'#4FD1FF',700);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<aside>La animación muestra una nave (o un tren) con longitud propia L₀. La línea punteada es esa longitud en reposo. A medida que sube la rapidez, la longitud que mide un observador externo se acorta solo en la dirección del movimiento. A 0,99 c queda en cerca de una séptima parte. Aclara que el objeto no «se aplasta»: es un resultado de comparar mediciones hechas en marcos distintos.</aside>
+</section>

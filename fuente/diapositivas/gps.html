@@ -1,0 +1,39 @@
+<section id="gps" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">Del espacio al teléfono: el GPS</h2>
+<div style="display:flex;flex-direction:column;gap:32px;width:760px">
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">1</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Los satélites transmiten señales con su posición y hora.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4FD1FF;width:60px">2</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">El receptor compara tiempos de llegada de varias señales.</p>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#FFC24D;width:60px">3</p>
+<p style="font-size:38px;line-height:1.3;color:#EAF0FF">Con al menos cuatro satélites estima posición y reloj.</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:928px;top:208px;width:864px;height:660px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="864" height="660"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),S,N=12,cx=432,cy=352,R=58,RO=242;
+function tx(s,px,py,sz,col,w){x.fillStyle=col;x.font=(w||600)+' '+sz+'px system-ui,Arial';x.fillText(s,px,py)}
+function f(ts){if(!S)S=ts;var t=ts-S;
+x.fillStyle='#0B1230';x.fillRect(0,0,864,660);
+x.strokeStyle='#26335F';x.lineWidth=2;x.setLineDash([6,8]);x.beginPath();x.arc(cx,cy,RO,0,6.3);x.stroke();x.setLineDash([]);
+var g=x.createRadialGradient(cx-20,cy-20,10,cx,cy,R);g.addColorStop(0,'#2F7FD0');g.addColorStop(1,'#0B2A52');
+x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,6.3);x.fill();x.strokeStyle='#4FD1FF';x.lineWidth=2;x.stroke();
+var rx=cx,ry=cy-R,vis=0;
+for(var k=0;k!=N;k++){var a=k*6.2832/N+t*.00022,sx=cx+RO*Math.cos(a),sy=cy+RO*Math.sin(a),on=sy>ry-4;
+if(on){vis++;x.strokeStyle='rgba(255,194,77,.35)';x.lineWidth=2;x.beginPath();x.moveTo(sx,sy);x.lineTo(rx,ry);x.stroke();
+var p=((t/1600)+k*.137)%1;x.fillStyle='#FFC24D';x.beginPath();x.arc(sx+(rx-sx)*p,sy+(ry-sy)*p,6,0,6.3);x.fill()}
+x.fillStyle=on?'#4FD1FF':'#4A5A8C';x.fillRect(sx-16,sy-6,32,12);x.fillRect(sx-30,sy-4,10,8);x.fillRect(sx+20,sy-4,10,8)}
+var r=8+6*((t/900)%1);x.strokeStyle='rgba(255,111,181,'+(1-(t/900)%1)+')';x.lineWidth=3;x.beginPath();x.arc(rx,ry,r+10,0,6.3);x.stroke();
+x.fillStyle='#FF6FB5';x.beginPath();x.arc(rx,ry,9,0,6.3);x.fill();
+tx('Satélites a la vista: '+vis,40,56,32,'#FFC24D',700);
+tx('Se necesitan al menos 4',40,622,28,'#C9D4F2');
+tx('Órbita a escala: 26 560 km del centro',40,650,26,'#A9B6D6');
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<aside>Los satélites GPS orbitan a unos 20 200 km de altura, a escala real en la animación: la órbita es unas 4 veces el radio terrestre. Hay unos 30 satélites y desde cualquier punto abierto del planeta se ven varios al mismo tiempo. El punto rosa es el teléfono: recibe señales de todos los que ve y mide cuánto tardó cada una. Con tres distancias se fija la posición; la cuarta señal corrige el reloj del teléfono, que es mucho menos preciso que los relojes atómicos de los satélites.</aside>
+</section>

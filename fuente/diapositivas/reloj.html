@@ -1,0 +1,30 @@
+<section id="reloj" data-transition="fade" style="background:radial-gradient(circle at 85% 0%, #15214A, #070B16 62%);color:#EAF0FF;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1.1;color:#EAF0FF">El reloj de luz</h2>
+<div style="display:flex;flex-direction:column;gap:44px;width:760px">
+<ul style="font-size:40px;line-height:1.4;color:#EAF0FF">
+<li>Dos espejos separados una distancia L.</li>
+<li>Un pulso de luz rebota entre ellos.</li>
+</ul>
+<div style="display:flex;flex-direction:column;gap:12px;background:#0F1730;border:1px solid #26335F;border-radius:24px;padding:40px">
+<p style="font-size:28px;color:#A9B6D6">Tiempo propio del reloj</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:80px;font-weight:600;line-height:1.1;color:#FFC24D">Δt₀ = 2L / c</p>
+</div>
+</div>
+<x-embed style="position:absolute;left:928px;top:208px;width:864px;height:640px"><body style="margin:0;background:#0B1230;overflow:hidden"><canvas id="c" width="864" height="640"></canvas><script>
+var c=document.getElementById('c'),x=c.getContext('2d'),T=2000,tp=120,bot=440,cx=330,S;
+function f(ts){if(!S)S=ts;var t=ts-S;
+x.fillStyle='#0B1230';x.fillRect(0,0,864,640);
+x.fillStyle='#4FD1FF';x.fillRect(cx-130,tp-8,260,16);x.fillRect(cx-130,bot-8,260,16);
+x.strokeStyle='#A9B6D6';x.lineWidth=2;x.beginPath();x.moveTo(cx+190,tp);x.lineTo(cx+190,bot);x.moveTo(cx+176,tp+14);x.lineTo(cx+190,tp);x.lineTo(cx+204,tp+14);x.moveTo(cx+176,bot-14);x.lineTo(cx+190,bot);x.lineTo(cx+204,bot-14);x.stroke();
+x.fillStyle='#EAF0FF';x.font='700 40px system-ui,Arial';x.fillText('L',cx+226,(tp+bot)/2+14);
+var ph=(t%T)/T,y=ph>.5?tp+(bot-tp)*(ph-.5)*2:bot-(bot-tp)*ph*2;
+var g=x.createRadialGradient(cx,y,2,cx,y,40);g.addColorStop(0,'rgba(255,111,181,.9)');g.addColorStop(1,'rgba(255,111,181,0)');
+x.fillStyle=g;x.beginPath();x.arc(cx,y,40,0,6.3);x.fill();
+x.fillStyle='#FF6FB5';x.beginPath();x.arc(cx,y,15,0,6.3);x.fill();
+x.fillStyle='#FFC24D';x.font='700 34px system-ui,Arial';x.fillText('Ticks: '+Math.floor(t/T),40,56);
+x.fillStyle='#C9D4F2';x.font='600 30px system-ui,Arial';x.fillText('Un tick = ida y vuelta de la luz',40,590);
+requestAnimationFrame(f)}
+requestAnimationFrame(f)
+</script></body></x-embed>
+<aside>Un reloj de luz es el reloj más simple que se puede imaginar: la luz rebota entre dos espejos y cada ida y vuelta es un «tick». Como la luz siempre viaja a c, el tiempo de un tick es 2L/c. Este es el tiempo propio: el que mide un observador que está en reposo respecto al reloj.</aside>
+</section>
